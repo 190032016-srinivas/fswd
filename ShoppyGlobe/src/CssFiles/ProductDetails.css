@@ -1,0 +1,113 @@
+.product-details-container {
+    display: flex;
+    align-items: flex-start;
+    padding: 1rem 2rem;
+    background-color: white;
+    width: 80%;
+    border-radius: 10px;
+    /* border: 2px solid red; */
+    /* margin-top: 2rem; */
+    
+  }
+  .image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-right: 2rem;
+    width: 30%;
+    /* border: 2px solid red; */
+
+  }
+
+  .main-pd-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .product-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    margin-right: 2rem;
+  }
+
+  .add-to-cart-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s,transform 0.2s;
+    width: 80%;
+  }
+  
+  .add-to-cart-button:hover {
+    background-color: #45a049;
+  }
+   .add-to-cart-button:focus {
+    outline: none;
+
+  }
+  .add-to-cart-button:active {
+    outline: none;
+    transform: scale(0.95); /* Slightly shrink on click */
+
+  }
+  
+  .product-info {
+    display: flex;
+    flex-direction: column;
+    /* border: 2px solid aqua; */
+    width: 60%;
+  }
+  
+  .product-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .product-category,
+  .product-price,
+  .product-discount,
+  .product-rating,
+  .product-description,
+  .product-availability,
+  .product-return-policy,
+  .product-warranty {
+    margin: 0.5rem 0;
+  }
+  
+
+  @media screen and (max-width: 1000px) {
+    
+    .product-details-container {
+      flex-direction: column;
+    }
+    .image-container {
+      width: 60%;
+      align-self: center;
+    }
+    .product-title {
+      font-size: 1.5rem;
+    }
+    .product-info {
+      width: 100%;
+    }
+    
+
+  }
+
+  @media screen and (max-width: 500px) {
+    
+    
+    .image-container {
+      width: 80%;
+      align-self: center;
+    }
+    
+    
+
+  }

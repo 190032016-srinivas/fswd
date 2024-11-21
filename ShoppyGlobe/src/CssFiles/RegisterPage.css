@@ -1,0 +1,81 @@
+/* RegisterPage.css */
+.register-parent-container {
+    height: 100vh;
+    /* border: 2px solid #007bff; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register-container {
+    width: 20%;
+    /* margin: 10% auto; */
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin: 0px;
+    margin-bottom: 20px;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group input {
+    box-sizing: border-box;
+    color: black;
+    font-family: inherit;
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #007bff;
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2);
+}
+
+.register-btn {
+    padding: 12px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.register-btn:hover {
+    background-color: #0056b3;
+}
+
+.switch-form {
+    text-align: center;
+    margin-top: 15px;
+}
+
+/* Responsive Styling for Mobile */
+@media (max-width: 768px) {
+    .register-container {
+        width: 80%;
+    }
+}

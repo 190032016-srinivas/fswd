@@ -1,0 +1,162 @@
+#root {
+  /* max-width: 1280px; */
+  /* margin: 0 auto; */
+  padding-inline: 2rem;
+  padding-block: 1rem;
+  /* text-align: center; */
+}
+#mainHeader {
+  border: 1px solid aqua;
+  border-radius: 10px;
+  padding-inline: 20px;
+  padding-block: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 255, 255, 0.3);
+}
+#book-container {
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transition both properties */
+}
+
+#book-container:hover {
+  box-shadow: 0 6px 12px rgba(0, 255, 255, 0.5);
+  transform: scale(1.05);
+}
+
+
+.headerLinksUnfocused {
+  color: aqua;
+  background-color: black;
+  border-radius: 5px;
+  padding-inline: 15px;
+  padding-block: 7px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 255, 255, 0.3);
+  text-decoration: none;
+}
+.headerLinksUnfocused:hover {
+  color: black;
+  background-color: aqua;
+  transform: scale(1.03);
+  box-shadow: 0 6px 12px rgba(0, 255, 255, 0.5);
+  text-decoration: none;
+
+}
+
+
+.headerLinksFocused {
+  border-radius: 5px;
+  padding-inline: 15px;
+  padding-block: 7px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  text-decoration: none;
+  color: black;
+  background-color: aqua;
+  transform: scale(1.03);
+  box-shadow: 0 6px 12px rgba(0, 255, 255, 0.5);
+
+}
+.headerLinksFocused:hover{
+  text-decoration: none;
+}
+
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+#genre-select {
+  color: aqua;
+  background-color: black;
+  border: 0px solid black;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 4px 8px rgba(0, 255, 255, 0.3);
+}
+
+#book-container:hover #book-image{
+  cursor: pointer;
+  opacity: 0.2;
+}
+#book-container:hover #book-details{
+  cursor: pointer;
+  opacity: 1;
+}
+
+
+
+/* searchbar css */
+
+.search-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 25px 0;
+}
+
+.search-input {
+  width: 300px;
+  padding: 10px;
+  border: 2px solid aqua;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s;
+  font-family: inherit;
+}
+
+.search-input:focus {
+  border-color: #0056b3;
+}
+
+.search-button {
+  padding: 10px 15px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search-button:hover {
+  background-color: aqua;
+  color:black
+}
+
+
+/* view details css */
+
+.home {
+  text-align: center;
+}
+
+.book-details {
+  padding: 20px;
+  text-align: center;
+}
+
+.book-details img {
+  max-width: 200px;
+  border-radius: 10px;
+}
+
+button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}

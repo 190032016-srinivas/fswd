@@ -1,0 +1,38 @@
+*{
+    background-color: black;
+    color: rgb(0, 179, 255);
+    font-size: 20px;
+}
+header{
+    display: flex;
+    justify-content: center;
+    font-size: 40px;
+}
+video{
+    border: 2px solid white;
+    width: 300px;
+    height: 500px;
+}
+#video_container{
+    display: flex;
+    justify-content: space-evenly;
+}
+.links{
+    display: inline-block;
+    margin: 10px;
+    /* width: 100px; */
+}
+#top_navbar{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+#img_container{
+    display: flex;
+    justify-content: space-evenly;
+}
+img{
+    width: 300px;
+    height: 200px;
+}

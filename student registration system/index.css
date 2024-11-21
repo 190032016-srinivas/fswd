@@ -1,0 +1,156 @@
+/* universal selectors by class */
+.label_1{
+    display: block;
+}
+.border_1{
+    border: 2px solid red;
+}
+.border_2{
+    border: 2px solid aqua;
+}
+/* universal selectors by tag */
+input{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 3%;
+    margin-top: 1%;
+    border: 3px solid #009879;
+    border-radius: 7px;
+}
+input::placeholder{
+    font-family:monospace;
+    /* font-weight: bold; */
+}
+label{
+    margin-top: 7%;
+    margin-bottom: 2%;
+    
+}
+
+
+
+body{
+    background-color: rgb(148, 246, 240);
+    /* background-image: url(images/pexels-minan1398-1353938.jpg);
+    background-size: cover; */
+    /* height: 10000px; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family:monospace;
+    font-weight: bold;
+    font-size: large;
+}
+#main_heading{
+    font-size: 300%;
+    margin-top: 2%;
+    margin-bottom: 4%;
+    color: #484848;
+}
+#parent_of_both{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+    #parent_input_div{
+        /* border: 2px solid #009879; */
+        width: 25%;
+        height: min-content;
+    }
+        #register_button{
+            margin-top: 9%;
+            margin-left: 35%;
+            padding: 2%;
+            border-radius: 10px;
+            background-color: #009879;
+            color: white;
+            width: 30%;
+        }
+        #register_button:hover{
+            cursor: pointer;
+            background-color: #06ff3c;
+            /* padding: 5%; */
+            color: black;
+        }
+    #parent_students_log_div{
+        border: 2px solid #009879;
+        min-height: 200px;
+        max-height: 70vh;
+        width:65%;
+        border-radius: 10px;
+        overflow: hidden;
+        /* max-height: 300px; */
+        overflow-y: auto;
+        /* overflow-x: auto; */
+        /* padding: 2%; */
+    }
+    #parent_students_log_div::-webkit-scrollbar{
+        /* display: none; */
+        width: 10px;
+    }
+    #parent_students_log_div::-webkit-scrollbar-track {
+        /* background: #f1f1f1;*/
+        background: transparent;
+    }
+    #parent_students_log_div::-webkit-scrollbar-thumb {
+        background-color: #cacaca; /* Thumb color */
+        border-radius: 5px; /* Rounded corners for the thumb */
+    }
+        #parent_table{
+            /* border: 2px solid red; */
+            border-collapse: collapse;
+            width: 100%;
+            /* font-size: 0.9rem; */
+        }
+        #parent_edit_icons{
+            display: flex;
+            justify-content: space-around;
+        }
+                .edit_icon{
+                    width: 30px;
+                    /* border: 2px solid red; */
+                }
+                .edit_icon:hover{
+                    background-color: #06ff3c;
+                    border-radius: 30% 30% 30% 0;
+                    src: url(images/pen.png);
+                    /* width: 40px; */
+                }
+            #parent_table thead tr{
+                background-color: #009879;
+                color: white;
+                text-align: left;
+                font-weight: bold;
+            }
+            #parent_table th{
+                padding: 3%;
+            }
+            #parent_table td{
+                padding: 2%;
+            }
+            #parent_table tr{
+                /* width: min-content; */
+                border-bottom: 2px solid #009879;
+            }
+            #parent_table tr:nth-of-type(even){
+                background-color: rgb(255, 255, 255);
+            }
+
+
+/* media queries */
+@media(width<1000px){
+    #parent_of_both{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+        #parent_input_div{
+            
+            width: 55%;
+        }
+        #parent_students_log_div{
+            margin-top: 10%;
+            width:95%
+        }
+}

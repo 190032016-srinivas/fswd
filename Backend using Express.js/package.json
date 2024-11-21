@@ -1,0 +1,16 @@
+{
+  "name": "backend-using-express",
+  "version": "1.0.0",
+  "description": "this is a folder for everything back end related using express.js",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "B.Srinivas",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1",
+    "mongoose": "^8.7.2"
+  }
+}

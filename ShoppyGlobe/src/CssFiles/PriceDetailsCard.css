@@ -1,0 +1,60 @@
+.price-details-card {
+    width: 25%;
+    border: 1px solid #ccc;
+    border-radius: 0.45rem;
+    padding: 1rem;
+    box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    height: fit-content;
+    box-sizing: border-box;
+  }
+  
+  h2 {
+    margin: 0;
+  }
+  
+  .price-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  
+  .total {
+    font-weight: bold;
+  }
+  
+  .place-order-button {
+    background-color: #4caf50; /* Green background */
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    align-self: flex-end;
+    
+  }
+  
+  .place-order-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+  }
+  
+  .place-order-button:active {
+    transform: scale(0.95); /* Slightly shrink on click */
+  }
+  
+  .place-order-button:focus {
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5); /* Optional focus style */
+  }
+  
+
+  @media screen and (max-width: 1000px) {
+    .price-details-card {
+      width: 100%;
+    }
+    
+  }

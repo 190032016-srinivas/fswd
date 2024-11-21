@@ -1,0 +1,70 @@
+
+
+*{
+    color: rgb(0, 179, 255);
+    
+}
+
+
+body{
+    background-color: rgb(0, 0, 0);
+    
+}
+
+header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header>p{
+    font-size: 22px;
+}
+nav{
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 60px;
+}
+
+#araku_container , #cricket_container, #photography_container,#quotes_container,#about_me_container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid white;
+    width: 280px;
+    height: 280px;
+    overflow: hidden;
+}
+#araku_thumbnail , #cricket_thumbnail , #photography_thumbnail , #quotes_thumbnail , #about_me_thumbnail{
+    width: 280px;
+    height: 255px;
+}
+
+@media (width < 607px) {
+    #araku_container , #cricket_container, #photography_container,#quotes_container,#about_me_container{
+        width: 100%;
+    }
+}
+
+@media ( width > 607px) and (width<896px){
+    #araku_container , #cricket_container, #photography_container,#quotes_container,#about_me_container{
+        width: 45%;
+    }
+}
+
+@media (width>896px) and (width<1194px){
+    #araku_container , #cricket_container, #photography_container,#quotes_container,#about_me_container{
+        width: 31%;
+    }
+}
+@media (width>1194px) and (width<1492px){
+    #araku_container , #cricket_container, #photography_container,#quotes_container,#about_me_container{
+        width: 23%;
+    }
+}
+
+/* footer>nav{
+    display: inline;
+} */

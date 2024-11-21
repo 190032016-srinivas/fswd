@@ -1,0 +1,117 @@
+/* CheckoutPage.css */
+
+.checkout-container {
+    width: 40%;
+    margin: 0 auto;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  h3 {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 15px;
+  }
+  
+  .checkout-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group input {
+    box-sizing: border-box;
+    color: black;
+    font-family: inherit;
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+  }
+  .form-group input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1); /* Change the brightness or invert color */
+    opacity: 1; /* Make the icon a bit more visible */
+  }
+  
+  .form-group input:focus {
+    border-color: #007bff;
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2);
+  }
+  
+  .form-row {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .form-row .form-group {
+    width: 32%; /* Each input will take roughly 1/3 of the row */
+  }
+  
+  .order-summary {
+    padding: 15px;
+    margin: 20px 0;
+    background-color: #f7f7f7;
+    border: 1px solid #eee;
+    border-radius: 8px;
+  }
+  
+  .order-summary p {
+    font-size: 16px;
+    margin: 8px 0;
+    color: #555;
+  }
+  
+  .checkout-btn {
+    padding: 12px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .checkout-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Responsive Styling for Mobile */
+  @media (max-width: 768px) {
+    .form-row {
+      flex-direction: column;
+    }
+  
+    .form-row .form-group {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  }
+  
+
+  @media screen and (max-width: 1000px) {
+    
+    .checkout-container {
+      width: 60%;
+    }
+    
+    
+
+  }

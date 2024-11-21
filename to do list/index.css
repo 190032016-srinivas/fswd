@@ -1,0 +1,138 @@
+body {
+    background-color: antiquewhite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+p {
+    margin: 0;
+}
+
+#parent_div_add_new_task {
+    /* border: 2px solid black; */
+    /* padding: 20px; */
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+    #main_heading {
+        font-size: 300%;
+        font-family: sans-serif;
+        font-weight: 700;
+        margin: 40px;
+    }
+
+    #add_new_task {
+        width: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 40px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        /* padding: 20px; */
+        /* border: 2px solid red; */
+    }
+
+        #textarea_add_new_task {
+            border: 2px solid black;
+            border-radius: 5px;
+            width: 90%;
+            /* height: 500px; */
+            padding: 10px;
+            background-color: white;
+
+        }
+
+        #add_task_button {
+            border-radius: 50%;
+            width: 8%;
+            margin: 10px;
+            /* border: 2px solid red; */
+            background-color: transparent;
+            transition: background-color 0.5s;
+        }
+
+        #add_task_button:hover {
+            cursor: pointer;
+            background-color: aqua;
+        }
+
+#parent_div_tasks_log {
+    /* border: 2px solid black; */
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+    #tasks_heading{
+        font-size: 250%;
+        font-family: sans-serif;
+        font-weight: 700;
+        margin-top: 40px;
+        margin-bottom: 20px;
+    }
+    #tasks_log {
+        border: 2px solid black;
+        width: 100%;
+        /* max-width: 100%; */
+        /* padding: 20px; */
+        border-radius: 5px;
+        background-color: white;
+        min-height: 100px;
+        max-height: 250px;
+        overflow-y: auto;
+        
+
+    }
+        .task{
+            margin: 2%;
+            /* border: 2px solid red; */
+            overflow: hidden; 
+            display: flex;  
+            justify-content: space-between; 
+            align-items: center;        
+        }
+            .task_name{
+                /* border: 2px solid aqua; */
+                font-size: 120%;
+                width: 90%;
+                overflow: hidden;
+                /* overflow-x: auto; */
+                /* &::-webkit-scrollbar { */
+                    /* display: none; Hide scrollbar */
+                /* } */
+            }
+            .task_tick{
+                padding-right: 0.5%;
+                width: 4%;
+            }
+                #completed_button{
+                    /* border: 2px solid pink; */
+                    border-radius: 50%;
+                    width: 100%;
+                    background-color: transparent;
+                    transition: background-color 0.5s;
+                }
+                #completed_button:hover{
+                    background-color:aqua;
+                    cursor: pointer;
+                }
+#parent_div_clear_logs{
+    margin-top: 20px;
+}
+    #clear_button{
+        padding: 10px;
+        border-radius: 10px;
+        transition: background-color 0.5s;
+    }
+    #clear_button:hover{
+        cursor: pointer;
+        background-color: aqua;
+        
+    }

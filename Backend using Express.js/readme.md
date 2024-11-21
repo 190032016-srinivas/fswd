@@ -1,0 +1,4 @@
+- be careful about the routes for get is is 'USERS' for others it is 'USER'
+- if you have node modules already please delete it and run npm install again
+- go to the correct project directory and run node server.js
+- thank you

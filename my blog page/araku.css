@@ -1,0 +1,38 @@
+*{
+    color: rgb(0, 179, 255);
+    font-size: 20px;
+}
+
+h3{
+    font-size: 30px;
+}
+
+body{
+    background-color: rgb(0, 0, 0);
+    
+}
+
+img{
+    width: 300px;
+    height: 200px;
+    margin: 5px;
+}
+video{
+    width: 300px;
+    height: 200px;
+}
+.links{
+    display: inline-block;
+    margin: 10px;
+    /* width: 100px; */
+}
+#top_navbar{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+header{
+    font-size: 50px;
+    display: flex;
+    justify-content: center;
+}
