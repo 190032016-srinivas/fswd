@@ -4,13 +4,25 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 
 import "../Css/navbar.css";
 import Logo from "../img/logo1.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Signup from "./Signup";
+import avatar from "../img/avatar.png";
+import Signin from "./SignIn";
 
 function Navbar() {
   const [isbtnClicked, setisbtnClicked] = useState(false);
+  const [isSwitch, setisSwitched] = useState(false);
+  const token = localStorage.getItem("userToken");
+
+  useEffect(() => {
+    if (token) {
+      setisbtnClicked(false);
+    }
+  }, []);
 
   return (
     <>
@@ -29,7 +41,14 @@ function Navbar() {
             />
           </div>
         </div>
-        <div className="right-bar">
+        <div
+          className="right-bar"
+          style={
+            token
+              ? { justifyContent: "space-evenly", paddingRight: "0px" }
+              : { justifyContent: "space-between", paddingRight: "25px" }
+          }
+        >
           <VideoCallOutlinedIcon
             className="icon-btns"
             fontSize="large"
@@ -44,12 +63,14 @@ function Navbar() {
             onClick={() => {
               if (isbtnClicked === false) {
                 setisbtnClicked(true);
+                document.body.classList.add("bg-css");
               } else {
                 setisbtnClicked(false);
+                document.body.classList.remove("bg-css");
               }
-              console.log(isbtnClicked);
             }}
             className="signin"
+            style={token ? { display: "none" } : { display: "flex" }}
           >
             <AccountCircleOutlinedIcon
               fontSize="medium"
@@ -57,6 +78,12 @@ function Navbar() {
             />
             <p>Signin</p>
           </button>
+          <img
+            src={avatar}
+            alt=""
+            className="profile-pic"
+            style={token ? { display: "block" } : { display: "none" }}
+          />
         </div>
       </div>
       <div
@@ -65,12 +92,61 @@ function Navbar() {
           isbtnClicked === true ? { display: "block" } : { display: "none" }
         }
       >
-        <p>Name</p>
-        <input type="text" />
-        <p>Name</p>
-        <input type="text" />
-        <p>Name</p>
-        <input type="text" />
+        <ClearRoundedIcon
+          onClick={() => {
+            if (isbtnClicked === false) {
+              setisbtnClicked(true);
+            } else {
+              setisbtnClicked(false);
+              document.body.classList.remove("bg-css");
+            }
+          }}
+          className="cancel"
+          fontSize="large"
+          style={{ color: "gray" }}
+        />
+        <div
+          className="signup-last"
+          style={
+            isSwitch === false ? { display: "block" } : { display: "none" }
+          }
+        >
+          <Signup />
+          <div className="already">
+            <p>Already have an account?</p>
+            <p
+              onClick={() => {
+                if (isSwitch === false) {
+                  setisSwitched(true);
+                } else {
+                  setisSwitched(false);
+                }
+              }}
+            >
+              Signin
+            </p>
+          </div>
+        </div>
+        <div
+          className="signin-last"
+          style={isSwitch === true ? { display: "block" } : { display: "none" }}
+        >
+          <Signin />
+          <div className="already">
+            <p>Don&apos;t have an account?</p>
+            <p
+              onClick={() => {
+                if (isSwitch === false) {
+                  setisSwitched(true);
+                } else {
+                  setisSwitched(false);
+                }
+              }}
+            >
+              Signup
+            </p>
+          </div>
+        </div>
       </div>
     </>
   );
