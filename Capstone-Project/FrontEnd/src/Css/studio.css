@@ -1,0 +1,406 @@
+@import url("https://fonts.googleapis.com/css2?family=Geologica:wght@600&display=swap");
+
+.studio {
+  background-color: #151515;
+  height: 100vh;
+}
+
+.create-channel {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #282828;
+  color: white;
+  padding: 50px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 10px;
+  z-index: 11;
+  animation: fadeUp 0.25s ease-out forwards;
+}
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  margin-top: 20px;
+}
+
+.btn {
+  cursor: pointer;
+  color: #282828;
+  background-color: #3ea6ff;
+  padding: 8px 20px;
+  border-radius: 3px;
+  font-size: 16px;
+  border: none;
+}
+
+.upload-btn-wrapper input[type="file"] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+.selected-pic {
+  width: 120px;
+  border-radius: 50%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.channel-head {
+  font-size: 35px;
+  font-family: "Geologica", sans-serif;
+}
+
+.channel-slogan {
+  margin-top: 15px;
+  font-weight: lighter;
+  color: gray;
+}
+.profile-pic-section {
+  margin-top: 35px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.channel-name {
+  margin-top: 30px;
+}
+
+.channelName {
+  background-color: #3d3f4359;
+  outline: none;
+  height: 28px;
+  width: 300px;
+  padding: 10px;
+  color: white;
+  margin-bottom: 10px;
+  font-size: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.27);
+  border-radius: 5px;
+}
+
+.channel-deatils {
+  margin-top: 0px;
+}
+
+.save-data {
+  margin-top: 15px;
+  cursor: pointer;
+  color: #282828;
+  background-color: #3ea6ff;
+  padding: 8px 20px;
+  border-radius: 3px;
+  font-size: 16px;
+  border: none;
+}
+
+.last-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+}
+
+.last-segment {
+  position: absolute;
+  width: 100%;
+  bottom: 0px;
+}
+
+.save-video-data {
+  cursor: pointer;
+  color: #282828;
+  background-color: #3ea6ff;
+  padding: 8px 20px;
+  border-radius: 3px;
+  font-size: 16px;
+  border: none;
+  width: fit-content;
+}
+
+.upload-content {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #282828;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  max-width: 100%;
+  min-width: 800px;
+  height: 750px;
+  z-index: 11;
+  animation: fadeUp 0.25s ease-out forwards;
+}
+
+.seperate2 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.top-head {
+  display: flex;
+  align-items: center;
+  padding: 25px;
+  padding-bottom: 10px;
+  padding-right: 12px;
+  padding-top: 10px;
+  font-size: 18px;
+  justify-content: space-between;
+}
+
+.upload-img {
+  cursor: pointer;
+  width: 170px;
+}
+
+.middle-data {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 34px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.middle-data > p:nth-child(3) {
+  font-size: 14px;
+  color: gray;
+}
+
+.close {
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 5px;
+}
+
+.close:hover {
+  color: white !important;
+  background-color: rgba(128, 128, 128, 0.306);
+  border-radius: 50%;
+}
+
+.details-section,
+.thumbnail-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 40px;
+  padding-top: 20px;
+}
+
+.thumbnail-section {
+  padding-top: 0px !important;
+}
+
+.details-section > p,
+.thumbnail-section > p:nth-child(1) {
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+
+.video-title,
+.video-tags {
+  background-color: #282828;
+  height: 50px;
+  width: 380px;
+  border: 2px solid rgba(128, 128, 128, 0.337);
+  border-radius: 3px;
+  padding: 10px;
+  color: white;
+  font-size: 17px;
+}
+
+.video-tags {
+  margin-top: 20px;
+}
+
+.video-description {
+  background-color: #282828;
+  height: 75px;
+  width: 380px;
+  border: 2px solid rgba(128, 128, 128, 0.337);
+  border-radius: 3px;
+  padding: 10px;
+  margin-top: 20px;
+  color: white;
+  font-size: 17px;
+}
+
+.video-title:focus,
+.video-description:focus,
+.video-tags:focus {
+  outline: 2px solid rgb(0, 145, 255);
+}
+.details-form {
+  margin-top: 0;
+}
+
+.video-description::placeholder,
+.video-title::placeholder,
+.video-tags::placeholder {
+  position: absolute;
+  top: 6px;
+  font-size: 14px;
+}
+
+.video-title:focus::placeholder,
+.video-description:focus::placeholder,
+.video-tags:focus::placeholder {
+  color: rgb(0, 145, 255);
+}
+
+.uploading-video-data {
+  display: flex;
+}
+
+.right-video-section {
+  position: relative;
+  top: 64px;
+}
+
+.preview-video {
+  width: 284.44px;
+  height: 160px;
+  background-color: #0d0d0d;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.preview-img > p,
+.vid-link > p {
+  color: #808080;
+  font-size: 14px;
+}
+
+.left-icons>p {
+  color: #9a9a9a;
+  font-size: 14px;
+}
+
+.file-details {
+  margin-top: 15px;
+}
+
+.file-details > p:nth-child(1) {
+  color: #808080;
+  font-size: 14px;
+}
+
+.vid-link > a {
+  color: #207bc5;
+  text-decoration: none;
+}
+
+.preview-bottom {
+  background-color: #1f1f1f;
+  padding: 10px;
+  line-height: 22px;
+}
+.link-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.preview-bottom {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.copy-btn {
+  cursor: pointer;
+  padding: 8px;
+  transition: all 0.15s ease;
+}
+
+.copy-btn:hover {
+  color: white !important;
+  background-color: rgba(128, 128, 128, 0.306);
+  border-radius: 30%;
+}
+
+.left-video-section {
+  width: 480px;
+}
+
+.thumbnail-section > p:nth-child(1) {
+  margin-bottom: 15px;
+}
+
+.thumbnail-section > p:nth-child(2),
+.upload-thumbnail > p {
+  color: #808080;
+  font-size: 14px;
+}
+
+.upload-thumbnail {
+  cursor: pointer;
+  border: 1.5px solid #808080;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 3px;
+  border-style: dashed;
+  margin-top: 20px;
+}
+
+.prevThumbnail {
+  cursor: pointer;
+  width: 176px;
+  height: 100px;
+  margin-top: 18px;
+  border-radius: 4px;
+  object-fit: cover;
+  transition: all 0.2s ease;
+  border: 2px solid rgba(255, 255, 255, 0.633);
+}
+
+.close2 {
+  position: absolute;
+  left: 182px;
+  bottom: 160px;
+  padding: 3px;
+  z-index: 12;
+}
+
+.left-icons {
+  display: flex;
+  align-items: center;
+}
+
+.left-ic {
+  animation: colorFade 4s infinite;
+}
+
+@keyframes colorFade {
+  0% {
+    color: gray;
+  } /* Start with gray color */
+  50% {
+    color: #3ea6ff;
+  } /* Transition to light blue color */
+  100% {
+    color: gray;
+  } /* Transition back to gray color */
+}
