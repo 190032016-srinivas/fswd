@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import validator from "validator";
-const UserData = new mongoose.Schema({
+const userModel = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -21,37 +21,9 @@ const UserData = new mongoose.Schema({
   profilePic: {
     type: String,
   },
-  hasChannel: {
-    type: Boolean,
-    default: false,
-  },
-  channelName: {
+  bannerPic: {
     type: String,
   },
-  thumbnails: [
-    {
-      imageURL: {
-        type: String,
-      },
-    },
-  ],
-  videos: [
-    {
-      videoURL: {
-        type: String,
-      },
-    },
-  ],
-  likedVideos: [
-    {
-      videoURL: {
-        type: String,
-      },
-      thumnailURL: {
-        type: String,
-      },
-    },
-  ],
 });
 
-export const userData = mongoose.model("userData", UserData);
+export const validUsers = mongoose.model("validUsers", userModel);

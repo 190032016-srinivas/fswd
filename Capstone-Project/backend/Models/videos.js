@@ -1,45 +1,50 @@
-import validator from "validator";
 import mongoose from "mongoose";
 
-const VideoData = new mongoose.Schema({
-  uploader: {
+const videoObjModel = new mongoose.Schema({
+  title: {
     type: String,
     required: true,
   },
-  email: {
+  ytUrl: {
     type: String,
     required: true,
-    validate(value) {
-      if (!validator.isEmail(value)) {
-        throw new Error("Invalid email address");
-      }
-    },
   },
-  VideoData: [
-    {
-      thumbnailURL: {
-        type: String,
-        required: true,
-      },
-      videoURL: {
-        type: String,
-        required: true,
-      },
-
-      Title: {
-        type: String,
-        required: true,
-      },
-      Description: {
-        type: String,
-        required: true,
-      },
-      Tags: {
-        type: String,
-        required: true,
-      },
-    },
-  ],
+  Tag: {
+    type: String,
+    required: true,
+  },
+  thumbnail: {
+    type: String,
+    required: true,
+  },
+  uploaderId: {
+    type: String,
+    required: true,
+  },
+  uploaderName: {
+    type: String,
+    required: true,
+  },
+  uploaderPhoto: {
+    type: String,
+    required: true,
+  },
+  likes: {
+    type: Number,
+    required: true,
+  },
+  dislikes: {
+    type: Number,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  views: {
+    type: String,
+    required: true,
+  },
 });
 
-export const videodata = mongoose.model("videodata", VideoData);
+export const validVideos = mongoose.model("validVideos", videoObjModel);
