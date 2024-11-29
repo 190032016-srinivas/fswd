@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import { commentRouter } from "./Routes/commentRouter.js";
+import { userRouter } from "./Routes/userRouter.js";
 
 const myServer = new express();
 
@@ -23,3 +24,4 @@ mongoose
   .catch((err) => console.log("Error connecting to MongoDB:", err));
 
 commentRouter(myServer);
+userRouter(myServer);

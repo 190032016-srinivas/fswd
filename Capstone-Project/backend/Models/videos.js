@@ -17,16 +17,20 @@ const videoObjModel = new mongoose.Schema({
     type: String,
     required: true,
   },
-  uploaderId: {
+  channelId: {
     type: String,
     required: true,
   },
-  uploaderName: {
+  channelName: {
     type: String,
     required: true,
   },
-  uploaderPhoto: {
+  channelPhoto: {
     type: String,
+    required: true,
+  },
+  views: {
+    type: Number,
     required: true,
   },
   likes: {
@@ -38,10 +42,6 @@ const videoObjModel = new mongoose.Schema({
     required: true,
   },
   description: {
-    type: String,
-    required: true,
-  },
-  views: {
     type: String,
     required: true,
   },

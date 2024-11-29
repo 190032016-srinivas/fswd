@@ -18,11 +18,9 @@ const userModel = new mongoose.Schema({
     type: String,
     required: true,
   },
-  profilePic: {
+  channelId: {
     type: String,
-  },
-  bannerPic: {
-    type: String,
+    required: true,
   },
 });
 

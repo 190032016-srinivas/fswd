@@ -18,16 +18,14 @@ function authenticateUser(req, res, next) {
 export function commentRouter(server) {
   server.get("/comments/:videoId", async (req, res) => {
     const videoId = req.params.videoId;
-    const response = await validComments.find({ videoId: videoId });
-    return res.status(200).json({
-      comments: response,
-    });
+    const comments = await validComments.find({ videoId: videoId });
+    return res.status(200).json(comments);
   });
   server.post("/comments/add", authenticateUser, async (req, res) => {
     const comment = req.body;
     const newComment = await validComments.create(comment);
     if (!newComment) res.status(400).json({ message: "something went wrong" });
-    else res.status(200).json({ comment: newComment });
+    else res.status(200).json(newComment);
   });
   server.put("/comments/update", authenticateUser, async (req, res) => {
     const { commentId, newComment } = req.body;
