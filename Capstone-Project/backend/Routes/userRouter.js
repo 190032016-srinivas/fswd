@@ -1,6 +1,9 @@
 import { validComments } from "../Models/comments.js";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 import { validUsers } from "../Models/user.js";
+import validator from "validator";
+
 function authenticateUser(req, res, next) {
   const header = req.headers["authorization"];
   if (!header || !header.startsWith("Bearer")) {
@@ -41,6 +44,37 @@ export function userRouter(server) {
         .json({ message: "update successful", newUserDetails });
     }
   );
-  server.post("/user/login", addCartItem);
-  server.post("/user/signup", addCartItem);
+  server.post("/user/login", async (req, res) => {
+    const userDetails = req.body;
+    const existingUser = await validUsers.findOne({ email: userDetails.email });
+    if (!existingUser) {
+      return res.status(400).json({ message: "no user found" });
+    } else {
+      const checkPassword = await bcrypt.compare(
+        userDetails.password,
+        existingUser.password
+      );
+      if (checkPassword) {
+        const authToken = jwt.sign(userDetails, "Srinivas_Secret_Key");
+        res.status(200).json({
+          authToken,
+          existingUser,
+        });
+      } else {
+        return res.status(400).json({ message: "wrong password" });
+      }
+    }
+  });
+  server.post("/user/signup", async (req, res) => {
+    const userDetails = req.body;
+    const existingUser = await validUsers.findOne({ email: userDetails.email });
+    if (existingUser) {
+      return res.status(400).json({ message: "email already taken" });
+    }
+    userDetails.password = await bcrypt.hash(userDetails.password, 11);
+    const newUser = await validUsers.create(userDetails);
+    return res
+      .status(200)
+      .json({ message: "user signed up successfully", newUser });
+  });
 }

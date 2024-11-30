@@ -16,6 +16,10 @@ const channelModel = new mongoose.Schema({
   bannerPic: {
     type: String,
   },
+  ownerId: {
+    type: String,
+    required: true,
+  },
   subscribers: {
     type: Number,
     required: true,
