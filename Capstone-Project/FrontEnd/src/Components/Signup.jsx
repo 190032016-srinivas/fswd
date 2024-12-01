@@ -1,8 +1,54 @@
 import { useState } from "react";
 import "../Css/navbar.css";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-function Signup() {
+function Signup(prop) {
+  // const backendURL = "https://youtube-clone-mern-backend.vercel.app"
+  const backendURL = "http://localhost:3000";
   const [data, setData] = useState({});
+  const [theme, setTheme] = useState(() => {
+    const Dark = localStorage.getItem("Dark");
+    return Dark ? JSON.parse(Dark) : true;
+  });
+
+  //TOASTS
+
+  const SignupNotify = () =>
+    toast.success("Signup successfull!", {
+      position: "top-center",
+      autoClose: 1200,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: theme ? "dark" : "light",
+    });
+
+  const ErrorNotify = () =>
+    toast.error("Input fields can't be empty.", {
+      position: "top-center",
+      autoClose: 1200,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: theme ? "dark" : "light",
+    });
+
+  const EmailErrorNotify = (data) =>
+    toast.error(data, {
+      position: "top-center",
+      autoClose: 1200,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: theme ? "dark" : "light",
+    });
 
   const handleInputs = (e) => {
     setData({
@@ -13,22 +59,35 @@ function Signup() {
 
   const SubmitData = async (e) => {
     e.preventDefault();
+    if (!data.name || !data.email || !data.password) {
+      ErrorNotify();
+      return;
+    }
     try {
-      const response = await fetch("http://localhost:3000/signup", {
+      const response = await fetch(`${backendURL}/user/signup`, {
         method: "POST",
+        // credentials: "include",
         body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",
         },
       });
-      const { message, token } = await response.json();
-      if (message === "REGISTRATION SUCCESSFUL") {
-        localStorage.setItem("userToken", token);
-        alert(message);
-        window.location.reload();
+      if (response.ok) {
+        SignupNotify();
+        // setTimeout(() => {
+        //   window.location.reload();
+        //   document.body.classList.remove("bg-class");
+        // }, 2000);
         document.body.classList.remove("bg-class");
+        document.body.classList.remove("bg-css");
+
+        prop.close(false);
+        const { authToken, newUser } = await response.json();
+        localStorage.setItem("authToken", authToken);
+        localStorage.setItem("userId", newUser._id);
+      } else {
+        EmailErrorNotify("Email already in use");
       }
-      alert(message);
     } catch (error) {
       alert(error.message);
     }
@@ -48,7 +107,11 @@ function Signup() {
           <input
             type="text"
             name="name"
-            className="username"
+            className={
+              theme
+                ? "username"
+                : "username email-light light-mode text-light-mode"
+            }
             placeholder="Name"
             required
             onChange={handleInputs}
@@ -56,7 +119,9 @@ function Signup() {
           <input
             type="email"
             name="email"
-            className="email"
+            className={
+              theme ? "email" : "email email-light light-mode text-light-mode"
+            }
             placeholder="Email Address"
             required
             onChange={handleInputs}
@@ -64,12 +129,19 @@ function Signup() {
           <input
             type="password"
             name="password"
-            className="password"
+            className={
+              theme
+                ? "password"
+                : "password email-light light-mode text-light-mode"
+            }
             placeholder="Passcode"
             required
             onChange={handleInputs}
           />
-          <button className="signup-btn" type="submit">
+          <button
+            className={theme ? "signup-btn" : "signup-btn signin-btn-light"}
+            type="submit"
+          >
             Create Your Account
           </button>
         </form>

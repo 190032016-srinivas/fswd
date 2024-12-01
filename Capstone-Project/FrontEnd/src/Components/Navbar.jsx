@@ -1,138 +1,258 @@
 //MUI Icons
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
-import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
-import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
-
+import AccountPop from "./AccountPop";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import "../Css/navbar.css";
 import Logo from "../img/logo1.png";
-import { useEffect, useState } from "react";
+import Logo2 from "../img/logo2.png";
+import { useEffect, useState, useRef } from "react";
 import Signup from "./Signup";
+import Signin from "./Signin";
 import avatar from "../img/avatar.png";
-import { useNavigate } from "react-router-dom";
-import jwtDecode from "jwt-decode";
-import Signin from "./SignIn";
-
+import { useParams } from "react-router-dom";
+import Tooltip from "@mui/material/Tooltip";
+import Zoom from "@mui/material/Zoom";
+import { FiSearch } from "react-icons/fi";
+import { IoIosSearch } from "react-icons/io";
+import { RxCross1 } from "react-icons/rx";
+import { AiOutlineVideoCameraAdd } from "react-icons/ai";
+import { useSelector } from "react-redux";
 function Navbar() {
-  const [isbtnClicked, setisbtnClicked] = useState(false);
-  const [isSwitch, setisSwitched] = useState(false);
-  const token = localStorage.getItem("userToken");
-  const [email, setEmail] = useState();
+  // const backendURL = "https://youtube-clone-mern-backend.vercel.app";
+  const backendURL = "http://localhost:3000";
+  const { data } = useParams();
+  const [data2, setData] = useState(data);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
+  const [isSwitch, setisSwitched] = useState(true);
   const [profilePic, setProfilePic] = useState();
+  const [showPop, setShowPop] = useState(false);
+  const [searchedData, setSearchedData] = useState();
+  const [loading, setLoading] = useState(true);
+  const [newSearch, setNewSearch] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    const Dark = localStorage.getItem("Dark");
+    return Dark ? JSON.parse(Dark) : true;
+  });
+  const profileRef = useRef();
+  const searchRef = useRef();
 
-  const navigate = useNavigate();
+  const User = useSelector((state) => state.user.user);
+  const { user } = User;
+  useEffect(() => {
+    if (User.success) {
+      setShowAuthPopup(false);
+    }
+  }, [user]);
 
   useEffect(() => {
-    if (token) {
-      setisbtnClicked(false);
-      setEmail(jwtDecode(token).email);
-    }
-  }, [token]);
+    const handler = (e) => {
+      if (!profileRef.current.contains(e.target)) {
+        setShowPop(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handler);
+  }, []);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (!searchRef.current.contains(e.target)) {
+        setNewSearch(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handler);
+  }, []);
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/getchannel/${email}`
-        );
-        const { profile } = await response.json();
-        setProfilePic(profile);
+        if (user?.email) {
+          const response = await fetch(
+            `${backendURL}/getuserimage/${user?.email}`
+          );
+          const { channelIMG } = await response.json();
+          setProfilePic(channelIMG);
+        }
       } catch (error) {
-        alert(error.message);
+        // console.log(error.message);
       }
     };
 
-    if (email) {
-      getData();
+    getData();
+  }, [user?.email]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 2500);
+  }, []);
+
+  const handleSearch = (e) => {
+    setSearchedData(e.target.value);
+    setData(e.target.value);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && searchedData) {
+      window.location.href = `/results/${searchedData}`;
     }
-  }, [email]);
+  };
 
   return (
     <>
-      <div className="navbar">
+      <div className={theme === true ? "navbar" : "navbar light-mode"}>
         <div className="left-bar">
-          <MenuRoundedIcon fontSize="large" style={{ color: "white" }} />
+          <MenuRoundedIcon
+            className={theme ? "menu" : "menu-light"}
+            fontSize="large"
+            style={{ color: theme ? "white" : "black" }}
+          />
           <img
-            src={Logo}
+            src={theme ? Logo : Logo2}
             alt="logo"
+            loading="lazy"
             className="youtubeLogo"
             onClick={() => {
-              navigate("/");
+              window.location.href = "/";
             }}
           />
         </div>
         <div className="middle-bar">
-          <div className="search">
-            <input type="text" placeholder="Type to search" id="searchType" />
-            <SearchRoundedIcon
-              className="search-icon"
-              fontSize="large"
-              style={{ color: "rgb(160, 160, 160)" }}
+          <div className={theme ? "search" : "search light-mode light-border"}>
+            <input
+              type="text"
+              placeholder="Type to search"
+              id={theme ? "searchType" : "searchType-light-mode"}
+              value={data2 ? data2 : searchedData}
+              onChange={handleSearch}
+              onKeyDown={handleKeyPress}
+            />
+            <IoIosSearch
+              className={theme ? "search-icon" : "search-light-icon"}
+              fontSize="28px"
+              style={{ color: theme ? "rgb(160, 160, 160)" : "black" }}
+              onClick={() => {
+                if (searchedData) {
+                  window.location.href = `/results/${searchedData}`;
+                }
+              }}
             />
           </div>
         </div>
         <div
           className="right-bar"
           style={
-            token
+            User.success
               ? { justifyContent: "space-evenly", paddingRight: "0px" }
-              : { justifyContent: "space-between", paddingRight: "25px" }
+              : { justifyContent: "space-evenly", paddingRight: "25px" }
           }
         >
-          <VideoCallOutlinedIcon
-            className="icon-btns"
-            fontSize="large"
-            style={{ color: "rgb(160, 160, 160)" }}
-            onClick={() => {
-              navigate("/studio");
-            }}
+          <FiSearch
+            fontSize="24px"
+            color={theme ? "#aaa" : "black"}
+            className="second-search"
+            onClick={() => setNewSearch(true)}
           />
-          <NotificationsNoneOutlinedIcon
-            className="icon-btns"
-            fontSize="large"
-            style={{ color: "rgb(160, 160, 160)" }}
-          />
+          <Tooltip
+            TransitionComponent={Zoom}
+            title="YouTube studio"
+            placement="bottom"
+          >
+            <AiOutlineVideoCameraAdd
+              className={theme ? "icon-btns videocreate" : "video-light"}
+              fontSize="24px"
+              style={{ color: theme ? "white" : "black" }}
+              onClick={() => {
+                if (User.success) {
+                  window.location.href = "/studio";
+                } else {
+                  setShowAuthPopup(true);
+                  document.body.classList.add("bg-css");
+                }
+              }}
+            />
+          </Tooltip>
+
           <button
             onClick={() => {
-              if (isbtnClicked === false) {
-                setisbtnClicked(true);
+              if (showAuthPopup === false) {
+                setShowAuthPopup(true);
                 document.body.classList.add("bg-css");
               } else {
-                setisbtnClicked(false);
+                setShowAuthPopup(false);
                 document.body.classList.remove("bg-css");
               }
             }}
-            className="signin"
-            style={token ? { display: "none" } : { display: "flex" }}
+            className={theme ? "signin" : "signin signin-light"}
+            style={User.success ? { display: "none" } : { display: "flex" }}
           >
             <AccountCircleOutlinedIcon
               fontSize="medium"
               style={{ color: "rgb(0, 162, 255)" }}
+              className="user-avatar"
             />
             <p>Signin</p>
           </button>
+          <SkeletonTheme
+            baseColor={theme ? "#353535" : "#aaaaaa"}
+            highlightColor={theme ? "#444" : "#b6b6b6"}
+          >
+            <div
+              className="navimg"
+              style={
+                loading === true && User.success
+                  ? { visibility: "visible" }
+                  : { visibility: "hidden", display: "none" }
+              }
+            >
+              <Skeleton
+                count={1}
+                width={42}
+                height={42}
+                style={{ borderRadius: "100%" }}
+                className="sk-profile"
+              />
+            </div>
+          </SkeletonTheme>
           <img
             src={profilePic ? profilePic : avatar}
-            alt=""
+            alt="user profile pic"
+            loading="lazy"
             className="profile-pic"
-            style={token ? { display: "block" } : { display: "none" }}
+            style={
+              User.success && loading === false
+                ? { display: "block" }
+                : { display: "none" }
+            }
+            onClick={() => {
+              if (showPop === false) {
+                setShowPop(true);
+              } else {
+                setShowPop(false);
+              }
+            }}
           />
         </div>
       </div>
       <div
-        className="auth-popup"
+        className={
+          theme ? "auth-popup" : "auth-popup light-mode text-light-mode"
+        }
         style={
-          isbtnClicked === true ? { display: "block" } : { display: "none" }
+          showAuthPopup === true ? { display: "block" } : { display: "none" }
         }
       >
         <ClearRoundedIcon
           onClick={() => {
-            if (isbtnClicked === false) {
-              setisbtnClicked(true);
+            if (showAuthPopup === false) {
+              setShowAuthPopup(true);
             } else {
-              setisbtnClicked(false);
+              setShowAuthPopup(false);
+              setisSwitched(false);
               document.body.classList.remove("bg-css");
             }
           }}
@@ -146,7 +266,7 @@ function Navbar() {
             isSwitch === false ? { display: "block" } : { display: "none" }
           }
         >
-          <Signup />
+          <Signup close={setShowAuthPopup} />
           <div className="already">
             <p>Already have an account?</p>
             <p
@@ -166,7 +286,7 @@ function Navbar() {
           className="signin-last"
           style={isSwitch === true ? { display: "block" } : { display: "none" }}
         >
-          <Signin />
+          <Signin close={setShowAuthPopup} />
           <div className="already">
             <p>Don&apos;t have an account?</p>
             <p
@@ -181,6 +301,44 @@ function Navbar() {
               Signup
             </p>
           </div>
+        </div>
+      </div>
+      <div
+        className="ac-pop"
+        ref={profileRef}
+        style={showPop === true ? { display: "block" } : { display: "none" }}
+      >
+        <AccountPop />
+      </div>
+      <div
+        className={theme ? "new-searchbar" : "new-searchbar2"}
+        style={{
+          display: newSearch && window.innerWidth <= 940 ? "flex" : "none",
+        }}
+      >
+        <div
+          className="new-searchbar-component"
+          ref={searchRef}
+          style={{
+            display: newSearch && window.innerWidth <= 940 ? "flex" : "none",
+          }}
+        >
+          <FiSearch fontSize="28px" color="#aaa" />
+          <input
+            type="text"
+            name="search-content"
+            placeholder="Type to search"
+            className="extra-search"
+            value={data2 ? data2 : searchedData}
+            onChange={handleSearch}
+            onKeyDown={handleKeyPress}
+          />
+          <RxCross1
+            fontSize="26px"
+            color="#aaa"
+            className="cancel-newsearch"
+            onClick={() => setNewSearch(false)}
+          />
         </div>
       </div>
     </>

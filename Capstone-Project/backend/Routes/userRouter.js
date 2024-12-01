@@ -59,6 +59,7 @@ export function userRouter(server) {
         res.status(200).json({
           authToken,
           existingUser,
+          message: "LOGIN SUCCESSFUL",
         });
       } else {
         return res.status(400).json({ message: "wrong password" });
@@ -73,8 +74,11 @@ export function userRouter(server) {
     }
     userDetails.password = await bcrypt.hash(userDetails.password, 11);
     const newUser = await validUsers.create(userDetails);
-    return res
-      .status(200)
-      .json({ message: "user signed up successfully", newUser });
+    const authToken = jwt.sign(userDetails, "Srinivas_Secret_Key");
+    return res.status(200).json({
+      authToken,
+      newUser,
+      message: "REGISTER SUCCESSFUL",
+    });
   });
 }
