@@ -2,53 +2,20 @@ import { useState } from "react";
 import "../Css/navbar.css";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useNotifications from "../useNotification";
+import { useDispatch } from "react-redux";
+import { saveUserDetails } from "../reducer/impDetails";
 
 function Signup(prop) {
-  // const backendURL = "https://youtube-clone-mern-backend.vercel.app"
   const backendURL = "http://localhost:3000";
   const [data, setData] = useState({});
   const [theme, setTheme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
+  const dispatch = useDispatch();
 
-  //TOASTS
-
-  const SignupNotify = () =>
-    toast.success("Signup successfull!", {
-      position: "top-center",
-      autoClose: 1200,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: theme ? "dark" : "light",
-    });
-
-  const ErrorNotify = () =>
-    toast.error("Input fields can't be empty.", {
-      position: "top-center",
-      autoClose: 1200,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: theme ? "dark" : "light",
-    });
-
-  const EmailErrorNotify = (data) =>
-    toast.error(data, {
-      position: "top-center",
-      autoClose: 1200,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: theme ? "dark" : "light",
-    });
+  const { SuccessNotify, ErrorNotify } = useNotifications(theme);
 
   const handleInputs = (e) => {
     setData({
@@ -60,36 +27,38 @@ function Signup(prop) {
   const SubmitData = async (e) => {
     e.preventDefault();
     if (!data.name || !data.email || !data.password) {
-      ErrorNotify();
+      ErrorNotify("Please fill all the details");
       return;
     }
     try {
       const response = await fetch(`${backendURL}/user/signup`, {
         method: "POST",
-        // credentials: "include",
         body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",
         },
       });
+      const { authToken, newUser, message } = await response.json();
       if (response.ok) {
-        SignupNotify();
-        // setTimeout(() => {
-        //   window.location.reload();
-        //   document.body.classList.remove("bg-class");
-        // }, 2000);
         document.body.classList.remove("bg-class");
         document.body.classList.remove("bg-css");
-
         prop.close(false);
-        const { authToken, newUser } = await response.json();
+        SuccessNotify(message);
         localStorage.setItem("authToken", authToken);
         localStorage.setItem("userId", newUser._id);
+        localStorage.removeItem("userPp");
+        dispatch(
+          saveUserDetails({
+            authToken,
+            channelPp: null,
+            userId: newUser._id.toString(),
+          })
+        );
       } else {
-        EmailErrorNotify("Email already in use");
+        ErrorNotify(message);
       }
     } catch (error) {
-      alert(error.message);
+      ErrorNotify(error.message);
     }
   };
 

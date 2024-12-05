@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { validUsers } from "../Models/user.js";
 import validator from "validator";
+import { validChannels } from "../Models/channel.js";
 
 function authenticateUser(req, res, next) {
   const header = req.headers["authorization"];
@@ -48,21 +49,25 @@ export function userRouter(server) {
     const userDetails = req.body;
     const existingUser = await validUsers.findOne({ email: userDetails.email });
     if (!existingUser) {
-      return res.status(400).json({ message: "no user found" });
+      return res.status(400).json({ message: "No user found" });
     } else {
       const checkPassword = await bcrypt.compare(
         userDetails.password,
         existingUser.password
       );
       if (checkPassword) {
+        const existingChannel = await validChannels.findOne({
+          ownerId: existingUser._id,
+        });
         const authToken = jwt.sign(userDetails, "Srinivas_Secret_Key");
         res.status(200).json({
           authToken,
           existingUser,
-          message: "LOGIN SUCCESSFUL",
+          channelPp: existingChannel ? existingChannel.profilePic : null,
+          message: "Login success",
         });
       } else {
-        return res.status(400).json({ message: "wrong password" });
+        return res.status(400).json({ message: "Wrong password" });
       }
     }
   });
@@ -70,7 +75,7 @@ export function userRouter(server) {
     const userDetails = req.body;
     const existingUser = await validUsers.findOne({ email: userDetails.email });
     if (existingUser) {
-      return res.status(400).json({ message: "email already taken" });
+      return res.status(400).json({ message: "Email already in use" });
     }
     userDetails.password = await bcrypt.hash(userDetails.password, 11);
     const newUser = await validUsers.create(userDetails);
@@ -78,7 +83,7 @@ export function userRouter(server) {
     return res.status(200).json({
       authToken,
       newUser,
-      message: "REGISTER SUCCESSFUL",
+      message: "SignUp successful",
     });
   });
 }

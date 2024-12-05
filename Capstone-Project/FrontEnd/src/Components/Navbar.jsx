@@ -39,13 +39,14 @@ function Navbar() {
   const profileRef = useRef();
   const searchRef = useRef();
 
-  const User = useSelector((state) => state.user.user);
-  const { user } = User;
-  useEffect(() => {
-    if (User.success) {
-      setShowAuthPopup(false);
-    }
-  }, [user]);
+  const impDetails = useSelector((state) => state.user.user);
+  console.log("userrr-", impDetails);
+  const { authToken, userId, userPp } = impDetails;
+  // useEffect(() => {
+  //   if (impDetails.success) {
+  //     setShowAuthPopup(false);
+  //   }
+  // }, [user]);
 
   useEffect(() => {
     const handler = (e) => {
@@ -67,29 +68,29 @@ function Navbar() {
     document.addEventListener("mousedown", handler);
   }, []);
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        if (user?.email) {
-          const response = await fetch(
-            `${backendURL}/getuserimage/${user?.email}`
-          );
-          const { channelIMG } = await response.json();
-          setProfilePic(channelIMG);
-        }
-      } catch (error) {
-        // console.log(error.message);
-      }
-    };
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       if (user?.email) {
+  //         const response = await fetch(
+  //           `${backendURL}/getuserimage/${user?.email}`
+  //         );
+  //         const { channelIMG } = await response.json();
+  //         setProfilePic(channelIMG);
+  //       }
+  //     } catch (error) {
+  //       // console.log(error.message);
+  //     }
+  //   };
 
-    getData();
-  }, [user?.email]);
+  //   getData();
+  // }, [user?.email]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 2500);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 2500);
+  // }, []);
 
   const handleSearch = (e) => {
     setSearchedData(e.target.value);
@@ -146,7 +147,7 @@ function Navbar() {
         <div
           className="right-bar"
           style={
-            User.success
+            impDetails.success
               ? { justifyContent: "space-evenly", paddingRight: "0px" }
               : { justifyContent: "space-evenly", paddingRight: "25px" }
           }
@@ -167,7 +168,7 @@ function Navbar() {
               fontSize="24px"
               style={{ color: theme ? "white" : "black" }}
               onClick={() => {
-                if (User.success) {
+                if (impDetails.success) {
                   window.location.href = "/studio";
                 } else {
                   setShowAuthPopup(true);
@@ -188,7 +189,7 @@ function Navbar() {
               }
             }}
             className={theme ? "signin" : "signin signin-light"}
-            style={User.success ? { display: "none" } : { display: "flex" }}
+            style={userId ? { display: "none" } : { display: "flex" }}
           >
             <AccountCircleOutlinedIcon
               fontSize="medium"
@@ -204,7 +205,7 @@ function Navbar() {
             <div
               className="navimg"
               style={
-                loading === true && User.success
+                impDetails.success
                   ? { visibility: "visible" }
                   : { visibility: "hidden", display: "none" }
               }
@@ -219,15 +220,11 @@ function Navbar() {
             </div>
           </SkeletonTheme>
           <img
-            src={profilePic ? profilePic : avatar}
+            src={userPp ?? avatar}
             alt="user profile pic"
             loading="lazy"
             className="profile-pic"
-            style={
-              User.success && loading === false
-                ? { display: "block" }
-                : { display: "none" }
-            }
+            style={userId ? { display: "block" } : { display: "none" }}
             onClick={() => {
               if (showPop === false) {
                 setShowPop(true);
