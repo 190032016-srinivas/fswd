@@ -26,7 +26,7 @@ import { useEffect } from "react";
 import { regainUserDetails } from "./reducer/impDetails";
 
 function App() {
-  const User = useSelector((state) => state.user.user);
+  const User = useSelector((state) => state.impDetailsStoreKey.impDetails);
   const { user } = User;
 
   const dispatch = useDispatch();

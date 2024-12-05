@@ -21,7 +21,6 @@ import { RxCross1 } from "react-icons/rx";
 import { AiOutlineVideoCameraAdd } from "react-icons/ai";
 import { useSelector } from "react-redux";
 function Navbar() {
-  // const backendURL = "https://youtube-clone-mern-backend.vercel.app";
   const backendURL = "http://localhost:3000";
   const { data } = useParams();
   const [data2, setData] = useState(data);
@@ -39,9 +38,11 @@ function Navbar() {
   const profileRef = useRef();
   const searchRef = useRef();
 
-  const impDetails = useSelector((state) => state.user.user);
+  const impDetails = useSelector(
+    (state) => state.impDetailsStoreKey.impDetails
+  );
   console.log("userrr-", impDetails);
-  const { authToken, userId, userPp } = impDetails;
+  const { userId, userPp } = impDetails;
   // useEffect(() => {
   //   if (impDetails.success) {
   //     setShowAuthPopup(false);
@@ -144,14 +145,7 @@ function Navbar() {
             />
           </div>
         </div>
-        <div
-          className="right-bar"
-          style={
-            impDetails.success
-              ? { justifyContent: "space-evenly", paddingRight: "0px" }
-              : { justifyContent: "space-evenly", paddingRight: "25px" }
-          }
-        >
+        <div className="right-bar">
           <FiSearch
             fontSize="24px"
             color={theme ? "#aaa" : "black"}

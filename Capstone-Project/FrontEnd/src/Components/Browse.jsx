@@ -35,7 +35,7 @@ function Browse() {
     return Dark ? JSON.parse(Dark) : true;
   });
 
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.impDetailsStoreKey.impDetails);
 
   useEffect(() => {}, []);
 
@@ -98,7 +98,6 @@ function Browse() {
       try {
         const response = await fetch(`${backendURL}/videos`);
         const allVideos = await response.json();
-        console.log("allvideos=", allVideos);
         setValidVideos(allVideos);
       } catch (error) {
         alert(error.message);
@@ -109,7 +108,6 @@ function Browse() {
   }, []);
 
   useEffect(() => {
-    console.log("validvideos=", validVideos);
     if (TagsSelected !== "All") {
       const tagsSelectedLower = TagsSelected.toLowerCase();
       const filteredVideos = validVideos.filter((element) =>
@@ -147,7 +145,7 @@ function Browse() {
       });
       await response.json();
     } catch (error) {
-      // console.log(error.message);
+      console.log(error.message);
     }
   };
 
