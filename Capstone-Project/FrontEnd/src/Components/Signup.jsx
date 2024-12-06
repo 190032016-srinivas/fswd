@@ -51,7 +51,7 @@ function Signup(prop) {
           saveUserDetails({
             authToken,
             channelPp: null,
-            userId: newUser._id.toString(),
+            userDetails: newUser,
           })
         );
       } else {

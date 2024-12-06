@@ -37,11 +37,9 @@ function Navbar() {
   });
   const profileRef = useRef();
   const searchRef = useRef();
-
   const impDetails = useSelector(
     (state) => state.impDetailsStoreKey.impDetails
   );
-  console.log("userrr-", impDetails);
   const { userId, userPp } = impDetails;
   // useEffect(() => {
   //   if (impDetails.success) {
@@ -57,6 +55,9 @@ function Navbar() {
     };
 
     document.addEventListener("mousedown", handler);
+    return () => {
+      document.removeEventListener("mousedown", handler);
+    };
   }, []);
 
   useEffect(() => {
@@ -67,6 +68,9 @@ function Navbar() {
     };
 
     document.addEventListener("mousedown", handler);
+    return () => {
+      document.removeEventListener("mousedown", handler);
+    };
   }, []);
 
   // useEffect(() => {
@@ -80,7 +84,7 @@ function Navbar() {
   //         setProfilePic(channelIMG);
   //       }
   //     } catch (error) {
-  //       // console.log(error.message);
+  //      console.log(error.message);
   //     }
   //   };
 
@@ -94,13 +98,12 @@ function Navbar() {
   // }, []);
 
   const handleSearch = (e) => {
-    setSearchedData(e.target.value);
     setData(e.target.value);
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter" && searchedData) {
-      window.location.href = `/results/${searchedData}`;
+    if (e.key === "Enter" && data2) {
+      window.location.href = `/results/${data2}`;
     }
   };
 
@@ -129,7 +132,7 @@ function Navbar() {
               type="text"
               placeholder="Type to search"
               id={theme ? "searchType" : "searchType-light-mode"}
-              value={data2 ? data2 : searchedData}
+              value={data2}
               onChange={handleSearch}
               onKeyDown={handleKeyPress}
             />
@@ -138,8 +141,8 @@ function Navbar() {
               fontSize="28px"
               style={{ color: theme ? "rgb(160, 160, 160)" : "black" }}
               onClick={() => {
-                if (searchedData) {
-                  window.location.href = `/results/${searchedData}`;
+                if (data2) {
+                  window.location.href = `/results/${data2}`;
                 }
               }}
             />
@@ -152,25 +155,21 @@ function Navbar() {
             className="second-search"
             onClick={() => setNewSearch(true)}
           />
-          <Tooltip
-            TransitionComponent={Zoom}
+
+          <AiOutlineVideoCameraAdd
             title="YouTube studio"
-            placement="bottom"
-          >
-            <AiOutlineVideoCameraAdd
-              className={theme ? "icon-btns videocreate" : "video-light"}
-              fontSize="24px"
-              style={{ color: theme ? "white" : "black" }}
-              onClick={() => {
-                if (impDetails.success) {
-                  window.location.href = "/studio";
-                } else {
-                  setShowAuthPopup(true);
-                  document.body.classList.add("bg-css");
-                }
-              }}
-            />
-          </Tooltip>
+            className={theme ? "icon-btns videocreate" : "video-light"}
+            fontSize="24px"
+            style={{ color: theme ? "white" : "black" }}
+            onClick={() => {
+              if (userId) {
+                window.location.href = "/studio";
+              } else {
+                setShowAuthPopup(true);
+                document.body.classList.add("bg-css");
+              }
+            }}
+          />
 
           <button
             onClick={() => {
@@ -192,27 +191,7 @@ function Navbar() {
             />
             <p>Signin</p>
           </button>
-          <SkeletonTheme
-            baseColor={theme ? "#353535" : "#aaaaaa"}
-            highlightColor={theme ? "#444" : "#b6b6b6"}
-          >
-            <div
-              className="navimg"
-              style={
-                impDetails.success
-                  ? { visibility: "visible" }
-                  : { visibility: "hidden", display: "none" }
-              }
-            >
-              <Skeleton
-                count={1}
-                width={42}
-                height={42}
-                style={{ borderRadius: "100%" }}
-                className="sk-profile"
-              />
-            </div>
-          </SkeletonTheme>
+
           <img
             src={userPp ?? avatar}
             alt="user profile pic"
@@ -320,7 +299,7 @@ function Navbar() {
             name="search-content"
             placeholder="Type to search"
             className="extra-search"
-            value={data2 ? data2 : searchedData}
+            value={data2}
             onChange={handleSearch}
             onKeyDown={handleKeyPress}
           />

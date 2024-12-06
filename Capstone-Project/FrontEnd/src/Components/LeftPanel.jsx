@@ -12,24 +12,12 @@ import { useEffect, useState } from "react";
 import Logo from "../img/logo1.png";
 import Logo2 from "../img/logo2.png";
 import { useLocation } from "react-router-dom";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
-import { GoHome } from "react-icons/go";
 import { GoHomeFill } from "react-icons/go";
 import { HiOutlineFire } from "react-icons/hi";
-import { HiMiniFire } from "react-icons/hi2";
-import { IoAddCircleOutline } from "react-icons/io5";
 import { MdOutlineSubscriptions } from "react-icons/md";
-import { MdSubscriptions } from "react-icons/md";
 import { MdOutlineVideoLibrary } from "react-icons/md";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import WhatshotIcon from "@mui/icons-material/Whatshot";
-import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
-import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
-import WatchLaterIcon from "@mui/icons-material/WatchLater";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import { MdVideoLibrary } from "react-icons/md";
 import { useSelector } from "react-redux";
 
 function LeftPanel() {
