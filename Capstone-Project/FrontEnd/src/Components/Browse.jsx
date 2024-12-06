@@ -29,15 +29,15 @@ function Browse() {
   const [TagsSelected, setTagsSelected] = useState("All");
   const [publishDate, setPublishDate] = useState();
   const [FilteredVideos, setFilteredVideos] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
 
-  const user = useSelector((state) => state.impDetailsStoreKey.impDetails);
-
-  useEffect(() => {}, []);
+  const impDetails = useSelector(
+    (state) => state.impDetailsStoreKey.impDetails
+  );
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -83,14 +83,14 @@ function Browse() {
 
   const Tags = [
     "All",
-    "Artificial Intelligence",
-    "Comedy",
     "Gaming",
+    "Comedy",
     "Vlog",
-    "Beauty",
+    "Artificial Intelligence",
     "Travel",
-    "Food",
     "Fashion",
+    "Beauty",
+    "Food",
   ];
 
   useEffect(() => {
@@ -99,6 +99,7 @@ function Browse() {
         const response = await fetch(`${backendURL}/videos`);
         const allVideos = await response.json();
         setValidVideos(allVideos);
+        setLoading(false);
       } catch (error) {
         alert(error.message);
       }
@@ -197,11 +198,22 @@ function Browse() {
             </div>
             <div
               className="video-section"
-              style={{
-                marginLeft: menuClicked ? "40px" : "40px",
-              }}
+              // style={{
+              //   marginLeft: menuClicked ? "40px" : "40px",
+              // }}
             >
-              <div className="uploaded-videos">
+              <div
+                className="uploaded-videos"
+                style={
+                  menuClicked === true
+                    ? {
+                        paddingRight: "50px",
+                      }
+                    : {
+                        paddingRight: "0px",
+                      }
+                }
+              >
                 {Array.from({ length: 16 }).map((_, index) => (
                   <>
                     <div className="video-data">
@@ -210,7 +222,7 @@ function Browse() {
                         count={1}
                         width={330}
                         height={186}
-                        style={{ borderRadius: "12px" }}
+                        style={{ borderRadius: "10px" }}
                         className="sk-browse-vid"
                       />
                       <div className="channel-basic-data">
@@ -312,7 +324,8 @@ function Browse() {
                         //     window.location.href = `/video/${element._id}`;
                         //   }, 400);
                         // }
-                        window.location.href = element.ytUrl;
+                        // window.location.href = element.ytUrl;
+                        window.location.href = `/video/${element.ytUrl}`;
                       }}
                     >
                       <img
