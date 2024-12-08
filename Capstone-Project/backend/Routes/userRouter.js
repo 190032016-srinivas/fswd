@@ -63,7 +63,7 @@ export function userRouter(server) {
         res.status(200).json({
           authToken,
           existingUser,
-          channelPp: existingChannel ? existingChannel.profilePic : null,
+          existingChannel,
           message: "Login success",
         });
       } else {

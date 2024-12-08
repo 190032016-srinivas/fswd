@@ -13,4 +13,16 @@ export function videoRouter(server) {
     const allVideos = await validVideos.find({});
     return res.status(200).json(allVideos);
   });
+
+  server.get("/videos/:videoId", async (req, res) => {
+    const videoId = req.params.videoId;
+    const videoData = await validVideos.findOne({ _id: videoId });
+    if (videoData) {
+      return res.status(200).json(videoData);
+    } else {
+      return res
+        .status(404)
+        .json({ message: "could not find any matching video" });
+    }
+  });
 }

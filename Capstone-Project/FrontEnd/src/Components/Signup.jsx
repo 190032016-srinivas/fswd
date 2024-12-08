@@ -44,16 +44,19 @@ function Signup(prop) {
         document.body.classList.remove("bg-css");
         prop.close(false);
         SuccessNotify(message);
+        localStorage.clear();
         localStorage.setItem("authToken", authToken);
         localStorage.setItem("userId", newUser._id);
-        localStorage.removeItem("userPp");
+        localStorage.setItem("userName", newUser.name);
+        localStorage.setItem("userEmail", newUser.email);
         dispatch(
           saveUserDetails({
             authToken,
-            channelPp: null,
+            existingChannel: {},
             userDetails: newUser,
           })
         );
+        // window.location.reload();
       } else {
         ErrorNotify(message);
       }

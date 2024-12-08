@@ -95,7 +95,8 @@ function App() {
             path="/subscriptions"
             element={user ? <Subscriptions /> : <Error />}
           />
-          <Route path="/video/:id" element={<VideoSection />} />
+          <Route path="/video/:videoId" element={<VideoSection />} />
+          {/* <Route path="/video/:ytUrl" element={<YouTubePlayer />} /> */}
           <Route path="/*" element={<Error />} />
         </Routes>
       </BrowserRouter>

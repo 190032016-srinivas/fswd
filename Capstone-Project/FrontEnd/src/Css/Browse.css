@@ -381,6 +381,10 @@
   .popular-categories {
     top: 55px !important;
   }
+  .video-section {
+    margin-left: 6px !important;
+    margin-top: 40px !important;
+  }
 }
 
 @media (max-width: 580px) {

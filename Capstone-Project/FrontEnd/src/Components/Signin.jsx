@@ -37,23 +37,34 @@ function Signin(prop) {
           "Content-Type": "application/json",
         },
       });
-      const { authToken, existingUser, channelPp, message } =
+      const { authToken, existingUser, existingChannel, message } =
         await response.json();
       if (response.ok) {
         document.body.classList.remove("bg-class");
         document.body.classList.remove("bg-css");
         prop.close(false);
         SuccessNotify(message);
-        localStorage.setItem("authToken", authToken);
-        localStorage.setItem("userId", existingUser._id);
-        if (channelPp) localStorage.setItem("userPp", channelPp);
+        if (authToken) localStorage.setItem("authToken", authToken);
+        if (existingUser?._id)
+          localStorage.setItem("userId", existingUser?._id);
+        if (existingUser?.name)
+          localStorage.setItem("userName", existingUser?.name);
+        if (existingUser?.email)
+          localStorage.setItem("userEmail", existingUser?.email);
+        if (existingChannel?.profilePic)
+          localStorage.setItem("userPp", existingChannel?.profilePic);
+        if (existingChannel?._id)
+          localStorage.setItem("channelId", existingChannel?._id);
+        if (existingChannel?.name)
+          localStorage.setItem("channelName", existingChannel?.name);
         dispatch(
           saveUserDetails({
             authToken,
-            channelPp,
+            existingChannel,
             userDetails: existingUser,
           })
         );
+        // window.location.reload();
       } else {
         ErrorNotify(message);
       }

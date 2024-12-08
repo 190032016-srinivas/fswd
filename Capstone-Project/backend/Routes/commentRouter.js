@@ -33,7 +33,6 @@ export function commentRouter(server) {
       { _id: commentId },
       { $set: { comment: newComment } }
     );
-    console.log("result=", result, commentId, newComment);
     if (!result.acknowledged) {
       return res.status(400).json({ message: "comment not found " });
     } else

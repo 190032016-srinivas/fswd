@@ -19,7 +19,7 @@ function AccountPop() {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
-  const [ChannelID, setChannelID] = useState();
+  // const [channelId, setChannelID] = useState();
   const [isBtnClicked, setIsBtnClicked] = useState(false);
   const [isChannel, setIsChannel] = useState(false);
   const dispatch = useDispatch();
@@ -30,30 +30,13 @@ function AccountPop() {
   const impDetails = useSelector(
     (state) => state.impDetailsStoreKey.impDetails
   );
-  const { userId, userPp, userName, userEmail, authToken } = impDetails;
-
-  console.log("so aledd user=", impDetails);
-
-  useEffect(() => {
-    const getChannelID = async () => {
-      try {
-        if (userId) {
-          const response = await fetch(`${backendURL}/channel/${userId}`);
-          const { _id } = await response.json();
-          setChannelID(_id);
-        }
-      } catch (error) {
-        console.log("error in fetching channel id ", error);
-      }
-    };
-
-    getChannelID();
-  }, [userId]);
+  const { userId, userPp, userName, userEmail, authToken, channelId } =
+    impDetails;
 
   const handleLogout = () => {
     dispatch(clearDetails());
     localStorage.clear();
-    window.location.href = "/";
+    window.location.reload();
   };
 
   return (
@@ -88,8 +71,8 @@ function AccountPop() {
           <div
             className={theme ? "yourchannel c-sec" : "yourchannel c-sec2"}
             onClick={() => {
-              if (ChannelID) {
-                window.location.href = `/channel/${ChannelID}`;
+              if (channelId) {
+                window.location.href = `/channel/${channelId}`;
               } else {
                 window.location.href = `/studio`;
               }

@@ -9,11 +9,15 @@ const commentsModel = new mongoose.Schema({
     type: String,
     required: true,
   },
-  userName: {
+  channelName: {
     type: String,
     required: true,
   },
-  userPP: {
+  channelId: {
+    type: String,
+    required: true,
+  },
+  channelPp: {
     type: String,
     required: true,
   },

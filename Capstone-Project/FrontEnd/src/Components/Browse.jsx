@@ -325,7 +325,7 @@ function Browse() {
                         //   }, 400);
                         // }
                         // window.location.href = element.ytUrl;
-                        window.location.href = `/video/${element.ytUrl}`;
+                        window.location.href = `/video/${element._id}`;
                       }}
                     >
                       <img
