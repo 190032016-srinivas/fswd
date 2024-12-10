@@ -232,7 +232,6 @@ function SearchResults() {
         style={{
           top: "130px",
           display: loading === true ? "none" : "block",
-          visibility: loading === true ? "hidden" : "visible",
         }}
       >
         <div className="searched-videos-section">
@@ -442,6 +441,16 @@ function SearchResults() {
                 </div>
               );
             })}
+          {(!searchedVideoData || searchedVideoData.length === 0) && (
+            <div className="searched-content">
+              <img src={nothing} alt="no results" className="nothing-found" />
+              <p
+                className={theme ? "no-results" : "no-results text-light-mode"}
+              >
+                No results found!
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </>
