@@ -3,7 +3,6 @@ import Studio from "./Components/Studio";
 import Error from "./Components/Error";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import VideoSection from "./Components/VideoSection";
-import LikeVideos from "./Components/LikeVideos";
 import WatchLater from "./Components/WatchLater";
 import OtherChannel from "./Components/Channel/OtherChannel";
 import Subscriptions from "./Components/Subscriptions";
@@ -77,10 +76,7 @@ function App() {
             path="/studio/video/comments/:id"
             element={user ? <VideoComments /> : <Error />}
           />
-          <Route
-            path="/likedVideos"
-            element={user ? <LikeVideos /> : <Error />}
-          />
+
           <Route
             path="/watchlater"
             element={user ? <WatchLater /> : <Error />}

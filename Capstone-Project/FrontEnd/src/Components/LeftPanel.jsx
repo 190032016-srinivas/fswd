@@ -46,11 +46,10 @@ function LeftPanel() {
   useEffect(() => {
     const handleMenuButtonClick = () => {
       if (window.innerWidth >= 860) {
+        console.log("clicking toggle in leftpanel as >860");
         setMenuClicked((prevMenuClicked) => !prevMenuClicked);
       } else {
         document.body.classList.add("bg-css");
-        setMenuClicked(false);
-
         setTogglePannel(true);
       }
     };
@@ -73,8 +72,6 @@ function LeftPanel() {
         setMenuClicked((prevMenuClicked) => !prevMenuClicked);
       } else {
         document.body.classList.add("bg-css");
-        setMenuClicked(false);
-
         setTogglePannel(true);
       }
     };
@@ -92,6 +89,7 @@ function LeftPanel() {
   }, []);
 
   useEffect(() => {
+    console.log("useefect tirggers in leftpael", menuClicked);
     localStorage.setItem("menuClicked", JSON.stringify(menuClicked));
   }, [menuClicked]);
 
@@ -149,12 +147,6 @@ function LeftPanel() {
 
     return () => GetSavedPlaylist();
   }, [user?.email]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 2500);
-  }, []);
 
   return (
     <>
@@ -416,7 +408,6 @@ function LeftPanel() {
             className="close-sidepanel"
             onClick={() => {
               document.body.classList.remove("bg-css");
-              setMenuClicked(false);
 
               setTogglePannel(false);
             }}

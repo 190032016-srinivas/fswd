@@ -25,4 +25,17 @@ export function videoRouter(server) {
         .json({ message: "could not find any matching video" });
     }
   });
+
+  server.get("/videos/search/:key", async (req, res) => {
+    const filteredVideos = [];
+    const key = req.params.key.toLowerCase();
+    const allVideos = await validVideos.find({});
+    for (let video of allVideos) {
+      let title = video.title.toLowerCase();
+      if (title.includes(key)) {
+        filteredVideos.push(video);
+      }
+    }
+    return res.status(200).json(filteredVideos);
+  });
 }

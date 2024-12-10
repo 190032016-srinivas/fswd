@@ -45,7 +45,9 @@ function Browse() {
 
   useEffect(() => {
     const handleMenuButtonClick = () => {
-      setMenuClicked((prevMenuClicked) => !prevMenuClicked);
+      console.log("clicking on menu in browse");
+      if (window.innerWidth >= 860)
+        setMenuClicked((prevMenuClicked) => !prevMenuClicked);
     };
 
     const menuButton = document.querySelector(".menu");
@@ -59,10 +61,29 @@ function Browse() {
       }
     };
   }, []);
+  // useEffect(() => {
+  //   const handleMenuButtonClick = () => {
+  //     console.log("clicking close side bar in browse");
+  //     setMenuClicked((prevMenuClicked) => !prevMenuClicked);
+  //   };
 
+  //   const menuButton = document.querySelector(".close-sidepanel");
+  //   if (menuButton) {
+  //     menuButton.addEventListener("click", handleMenuButtonClick);
+  //   }
+
+  //   return () => {
+  //     if (menuButton) {
+  //       menuButton.removeEventListener("click", handleMenuButtonClick);
+  //     }
+  //   };
+  // }, []);
   useEffect(() => {
     const handleMenuButtonClick = () => {
-      setMenuClicked((prevMenuClicked) => !prevMenuClicked);
+      console.log("clicking on menu in browse light mode");
+
+      if (window.innerWidth >= 860)
+        setMenuClicked((prevMenuClicked) => !prevMenuClicked);
     };
 
     const menuButton = document.querySelector(".menu-light");
@@ -78,6 +99,7 @@ function Browse() {
   }, []);
 
   useEffect(() => {
+    console.log("useefect trigered in browse", menuClicked);
     localStorage.setItem("menuClicked", JSON.stringify(menuClicked));
   }, [menuClicked]);
 
