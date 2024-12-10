@@ -518,6 +518,9 @@
   .thischannel-name {
     margin-right: 5px;
   }
+  .no-results {
+    top: 330px !important;
+  }
   .subscribethis-channel2,
   .subscribethis-channel {
     font-size: 12.5px;
