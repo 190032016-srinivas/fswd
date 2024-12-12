@@ -26,6 +26,13 @@ export function videoRouter(server) {
     }
   });
 
+  server.get("/videos/channel/:channelId", async (req, res) => {
+    const channelId = req.params.channelId;
+    const videoData = await validVideos.find({ channelId: channelId });
+
+    return res.status(200).json(videoData);
+  });
+
   server.get("/videos/search/:key", async (req, res) => {
     const filteredVideos = [];
     const key = req.params.key.toLowerCase();
