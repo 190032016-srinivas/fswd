@@ -3,6 +3,8 @@ import cors from "cors";
 import mongoose from "mongoose";
 import { commentRouter } from "./Routes/commentRouter.js";
 import { userRouter } from "./Routes/userRouter.js";
+import { channelRouter } from "./Routes/channelRouter.js";
+import { videoRouter } from "./Routes/videoRouter.js";
 
 const myServer = new express();
 
@@ -25,3 +27,5 @@ mongoose
 
 commentRouter(myServer);
 userRouter(myServer);
+channelRouter(myServer);
+videoRouter(myServer);
