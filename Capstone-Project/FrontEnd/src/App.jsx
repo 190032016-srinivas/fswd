@@ -83,7 +83,7 @@ function App() {
           />
 
           <Route path="/library" element={user ? <Library /> : <Error />} />
-          <Route path="/channel/:id" element={<OtherChannel />} />
+          <Route path="/channel/:channelId" element={<OtherChannel />} />
           <Route path="/trending" element={<Trending />} />
           <Route path="/results/:data" element={<SearchResults />} />
           <Route path="/playlist/:id" element={<Playlists />} />
@@ -92,7 +92,6 @@ function App() {
             element={user ? <Subscriptions /> : <Error />}
           />
           <Route path="/video/:videoId" element={<VideoSection />} />
-          {/* <Route path="/video/:ytUrl" element={<YouTubePlayer />} /> */}
           <Route path="/*" element={<Error />} />
         </Routes>
       </BrowserRouter>
