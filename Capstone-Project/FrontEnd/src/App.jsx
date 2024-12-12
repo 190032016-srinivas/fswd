@@ -25,8 +25,10 @@ import { useEffect } from "react";
 import { regainUserDetails } from "./reducer/impDetails";
 
 function App() {
-  const User = useSelector((state) => state.impDetailsStoreKey.impDetails);
-  const { user } = User;
+  const impDetails = useSelector(
+    (state) => state.impDetailsStoreKey.impDetails
+  );
+  const { userId } = impDetails;
 
   const dispatch = useDispatch();
 
@@ -55,41 +57,41 @@ function App() {
         <Routes>
           <Route path="/" element={<Browse />} />
           <Route path="/home" element={<Browse />} />
-          <Route path="/studio" element={user ? <Studio /> : <Error />} />
+          <Route path="/studio" element={userId ? <Studio /> : <Error />} />
           <Route
             path="/studio/customize"
-            element={user ? <Customization /> : <Error />}
+            element={userId ? <Customization /> : <Error />}
           />
           <Route
             path="/studio/video"
-            element={user ? <Content /> : <Error />}
+            element={userId ? <Content /> : <Error />}
           />
           <Route
             path="/studio/comments"
-            element={user ? <Comments /> : <Error />}
+            element={userId ? <Comments /> : <Error />}
           />
           <Route
             path="/studio/video/edit/:id"
-            element={user ? <VideoDetails /> : <Error />}
+            element={userId ? <VideoDetails /> : <Error />}
           />
           <Route
             path="/studio/video/comments/:id"
-            element={user ? <VideoComments /> : <Error />}
+            element={userId ? <VideoComments /> : <Error />}
           />
 
           <Route
             path="/watchlater"
-            element={user ? <WatchLater /> : <Error />}
+            element={userId ? <WatchLater /> : <Error />}
           />
 
-          <Route path="/library" element={user ? <Library /> : <Error />} />
+          <Route path="/library" element={userId ? <Library /> : <Error />} />
           <Route path="/channel/:channelId" element={<OtherChannel />} />
           <Route path="/trending" element={<Trending />} />
           <Route path="/results/:data" element={<SearchResults />} />
           <Route path="/playlist/:id" element={<Playlists />} />
           <Route
             path="/subscriptions"
-            element={user ? <Subscriptions /> : <Error />}
+            element={userId ? <Subscriptions /> : <Error />}
           />
           <Route path="/video/:videoId" element={<VideoSection />} />
           <Route path="/*" element={<Error />} />
