@@ -13,9 +13,6 @@ const channelModel = new mongoose.Schema({
   profilePic: {
     type: String,
   },
-  bannerPic: {
-    type: String,
-  },
   ownerId: {
     type: String,
     required: true,
