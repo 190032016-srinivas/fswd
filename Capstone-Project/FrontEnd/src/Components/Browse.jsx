@@ -347,6 +347,7 @@ function Browse() {
                         //   }, 400);
                         // }
                         // window.location.href = element.ytUrl;
+                        localStorage.setItem("menuClicked", false);
                         window.location.href = `/video/${element._id}`;
                       }}
                     >
