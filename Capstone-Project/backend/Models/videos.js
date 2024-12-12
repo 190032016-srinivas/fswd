@@ -41,6 +41,9 @@ const videoObjModel = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  duration: {
+    type: Number,
+  },
   description: {
     type: String,
     required: true,
