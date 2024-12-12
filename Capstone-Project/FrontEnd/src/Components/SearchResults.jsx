@@ -251,6 +251,7 @@ function SearchResults() {
                     display: "flex",
                   }}
                   onClick={() => {
+                    localStorage.setItem("menuClicked", false);
                     window.location.href = `/video/${element._id}`;
                   }}
                 >
