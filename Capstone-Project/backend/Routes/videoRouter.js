@@ -26,6 +26,32 @@ export function videoRouter(server) {
     }
   });
 
+  server.put("/videos/:videoId", async (req, res) => {
+    const videoId = req.params.videoId;
+    const {
+      previewTitle,
+      previewYtUrl,
+      previewTags,
+      previewThumbnail,
+      previewDescription,
+    } = req.body;
+    const result = await validVideos.updateOne(
+      { _id: videoId },
+      {
+        $set: {
+          title: previewTitle,
+          ytUrl: previewYtUrl,
+          Tag: previewTags,
+          thumbnail: previewThumbnail,
+          description: previewDescription,
+        },
+      }
+    );
+    if (!result.acknowledged) {
+      return res.status(400).json({ message: "video not found " });
+    } else res.status(200).json({ message: "updated successfully " });
+  });
+
   server.get("/videos/channel/:channelId", async (req, res) => {
     const channelId = req.params.channelId;
     const videoData = await validVideos.find({ channelId: channelId });
