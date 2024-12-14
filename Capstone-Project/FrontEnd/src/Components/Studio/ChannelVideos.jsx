@@ -1,54 +1,33 @@
-import LeftPanel2 from "../LeftPanel2";
-import Navbar2 from "../Navbar2";
-import "../../Css/Studio/content.css";
+import "../../Css/Studio/channelvideos.css";
 import WestIcon from "@mui/icons-material/West";
-
-import SouthIcon from "@mui/icons-material/South";
+import { storage } from "../../Firebase";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useEffect, useState } from "react";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
-import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
-import YouTubeIcon from "@mui/icons-material/YouTube";
-import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
-import NorthOutlinedIcon from "@mui/icons-material/NorthOutlined";
-import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-import KeyboardTabOutlinedIcon from "@mui/icons-material/KeyboardTabOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import Tooltip from "@mui/material/Tooltip";
-import Zoom from "@mui/material/Zoom";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
-import noImage from "../../img/no-video2.png";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
 import useNotifications from "../../useNotification";
 
 function Content(prop) {
   const backendURL = "http://localhost:3000";
-  const [userVideos, setUserVideos] = useState([]);
-  const [sortByDateAsc, setSortByDateAsc] = useState(true);
-  const [changeSort, setChangeSort] = useState(false);
-  const [showOptions, setShowOptions] = useState(false);
   const [isDeleteClicked, setIsDeleteClicked] = useState(false);
   const [isEditClicked, setIsEditClicked] = useState(false);
   const [deleteVideo, setDeleteVideo] = useState();
-  const [editVideo, setEditVideo] = useState();
   const [boxclicked, setBoxClicked] = useState(false);
-  const videoUrl = "https://shubho-youtube-mern.netlify.app/video";
   const [loading, setLoading] = useState(false);
-
   const [editVideoId, setEditVideoId] = useState();
   const [previewTitle, setPreviewTitle] = useState("");
   const [previewDescription, setPreviewDescription] = useState("");
   const [previewTags, setPreviewTags] = useState("");
   const [previewYtUrl, setPreviewYtUrl] = useState("");
   const [previewThumbnail, setPreviewThumbnail] = useState(null);
-  const [thumbnailSelected, setThumbnailSelected] = useState(false);
-  const [finalThumbnail, setFinalThumbnail] = useState(null);
+  const [imgLoading, setImgLoading] = useState(false);
   const [menu, setmenu] = useState(() => {
     const menu = localStorage.getItem("studioMenuClicked");
     return menu ? JSON.parse(menu) : false;
@@ -57,94 +36,52 @@ function Content(prop) {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
-
   document.title = "Channel content - YouTube Studio";
 
-  //TOASTS
-
-  const CopiedNotify = () =>
-    toast.success("Link Copied!", {
-      position: "bottom-center",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: theme ? "dark" : "light",
-    });
-
-  //USE EFFECTS
-
-  // useEffect(() => {
-  //   const GetdeleteVideo = async () => {
-  //     try {
-  //       if (DeleteVideoID) {
-  //         const response = await fetch(
-  //           `${backendURL}/getdeleteVideo/${DeleteVideoID}`
-  //         );
-
-  //         const data = await response.json();
-  //         setdeleteVideo(data);
-  //       }
-  //     } catch (error) {
-  //       // console.log(error.message);
-  //     }
-  //   };
-
-  //   GetdeleteVideo();
-  // }, [DeleteVideoID]);
-
-  const handleSortByDate = () => {
-    setSortByDateAsc((prevState) => !prevState);
-    setChangeSort(!changeSort);
-  };
-
-  //POST REQUESTS
+  const impDetails = useSelector(
+    (state) => state.impDetailsStoreKey.impDetails
+  );
+  const { authToken } = impDetails;
+  const { SuccessNotify, ErrorNotify } = useNotifications(theme);
 
   const DeleteVideo = async (id) => {
     try {
       if (id) {
-        const response = await fetch(`${backendURL}/deletevideo/${id}`, {
-          method: "POST",
-          credentials: "include",
+        const response = await fetch(`${backendURL}/videos/${id}`, {
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
         });
 
         await response.json();
+        if (response.ok) {
+          SuccessNotify("Video deleted.");
+          setTimeout(() => {
+            window.location.reload();
+          }, 1200);
+        } else {
+          ErrorNotify("Could not delete video");
+        }
       }
     } catch (error) {
-      // console.log(error.message);
+      ErrorNotify(error);
     }
   };
 
-  const handleCopyLink = (id) => {
-    navigator.clipboard
-      .writeText(`${videoUrl}/${id}`)
-      .then(() => {
-        CopiedNotify();
-      })
-      .catch((error) => {
-        console.log("Error copying link to clipboard:", error);
-      });
-  };
+  useEffect(() => {
+    const thumbnailSection = document.querySelector(".currnt-tbimg2");
+    if (thumbnailSection) {
+      if (imgLoading) {
+        thumbnailSection.style.cursor = "wait";
+      } else {
+        thumbnailSection.style.cursor = "pointer";
+      }
+    }
+  }, [imgLoading]);
 
-  const downloadVideo = (url) => {
-    const link = document.createelement("a");
-    link.href = url;
-    link.target = "_blank";
-    link.download = "video.mp4";
-    link.click();
-  };
-
-  const DeleteVideoUploadDate = new Date(
-    deleteVideo && deleteVideo.uploaded_date
-  );
-  const { SuccessNotify, ErrorNotify } = useNotifications(theme);
-
-  const handleThumbnailUpload = (e) => {
+  const handleThumbnailUpload = async (e) => {
+    setImgLoading(true);
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -152,11 +89,9 @@ function Content(prop) {
       img.onload = () => {
         const aspectRatio = img.width / img.height;
         if (Math.abs(aspectRatio - 16 / 9) < 0.01) {
-          setPreviewThumbnail(reader.result);
-          setThumbnailSelected(true);
-          setFinalThumbnail(file);
         } else {
           alert("Please upload an image with a 16:9 aspect ratio.");
+          return;
         }
       };
       img.src = reader.result;
@@ -164,17 +99,37 @@ function Content(prop) {
     if (file) {
       reader.readAsDataURL(file);
     }
+    const fileReference = ref(storage, `profile/${file.name}`);
+    const uploadData = uploadBytesResumable(fileReference, file);
+    uploadData.on(
+      "state_changed",
+      null,
+      (error) => {
+        ErrorNotify(error);
+        setImgLoading(false);
+        return;
+      },
+      async () => {
+        try {
+          const downloadURL = await getDownloadURL(uploadData.snapshot.ref);
+          setPreviewThumbnail(downloadURL);
+          console.log("src gene=", downloadURL);
+          setImgLoading(false);
+        } catch (error) {
+          ErrorNotify(error);
+          setImgLoading(false);
+          return;
+        }
+      }
+    );
   };
+
   const getVideoId = (url) => {
     const regex =
       /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const match = url.match(regex);
     return match && match[1] ? match[1] : url;
   };
-  const impDetails = useSelector(
-    (state) => state.impDetailsStoreKey.impDetails
-  );
-  const { userId, userPp, authToken, channelId, channelName } = impDetails;
 
   async function EditVideo() {
     try {
@@ -211,7 +166,7 @@ function Content(prop) {
       }, 1200);
     }
   }
-  console.log("videos in child -=", prop.channelVideos);
+
   return (
     <>
       {!isEditClicked && (
@@ -361,9 +316,6 @@ function Content(prop) {
                                     ? "studio-video-title"
                                     : "studio-video-title text-light-mode"
                                 }
-                                // onClick={() => {
-                                //   window.location.href = `/studio/video/edit/${element?._id}`;
-                                // }}
                               >
                                 {element?.title.length <= 40
                                   ? element?.title
@@ -395,7 +347,6 @@ function Content(prop) {
                                 fontSize="medium"
                                 style={{ color: theme ? "#aaa" : "#606060" }}
                                 onClick={() => {
-                                  // setEditVideo(element);
                                   setEditVideoId(element._id);
                                   setPreviewTitle(element.title);
                                   setPreviewDescription(element.description);
@@ -410,7 +361,6 @@ function Content(prop) {
                                 onClick={() => {
                                   setDeleteVideo(element);
                                   if (element?._id !== undefined) {
-                                    // setShowOptions(false);
                                     setIsDeleteClicked(true);
                                     document.body.classList.add("bg-css2");
                                   }
@@ -423,159 +373,6 @@ function Content(prop) {
                                 fontSize="medium"
                                 style={{ color: theme ? "#aaa" : "#606060" }}
                               />
-
-                              {/* <ChatOutlinedIcon
-                                className={
-                                  theme
-                                    ? "video-edit-icons"
-                                    : "video-edit-icons-light"
-                                }
-                                fontSize="medium"
-                                style={{ color: theme ? "#aaa" : "#606060" }}
-                                onClick={() => {
-                                  window.location.href = `/studio/video/comments/${element?._id}`;
-                                }}
-                              /> */}
-
-                              {/* <YouTubeIcon
-                                className={
-                                  theme
-                                    ? "video-edit-icons"
-                                    : "video-edit-icons-light"
-                                }
-                                fontSize="medium"
-                                style={{ color: theme ? "#aaa" : "#606060" }}
-                                onClick={() => {
-                                  window.location.href = `/video/${element?._id}`;
-                                }}
-                              /> */}
-
-                              {/* <MoreVertOutlinedIcon
-                              className={
-                                theme
-                                  ? "video-edit-icons"
-                                  : "video-edit-icons-light"
-                              }
-                              fontSize="medium"
-                              style={{ color: theme ? "#aaa" : "#606060" }}
-                              onClick={() => setShowOptions(!showOptions)}
-                            /> */}
-
-                              <div
-                                className={
-                                  theme
-                                    ? "extra-options-menu"
-                                    : "extra-options-menu light-mode"
-                                }
-                                style={
-                                  showOptions === true
-                                    ? { display: "flex" }
-                                    : { display: "none" }
-                                }
-                              >
-                                <div
-                                  className={
-                                    theme
-                                      ? "edit-video-data-row option-row"
-                                      : "edit-video-data-row option-row preview-lightt"
-                                  }
-                                  onClick={() => {
-                                    window.location.href = `/studio/video/edit/${element?._id}`;
-                                  }}
-                                >
-                                  <ModeEditOutlineOutlinedIcon
-                                    className={
-                                      theme
-                                        ? "video-edit-icons"
-                                        : "video-edit-icons-light"
-                                    }
-                                    fontSize="medium"
-                                    style={{
-                                      color: theme ? "#aaa" : "#606060",
-                                    }}
-                                  />
-                                  <p>Edit title and description</p>
-                                </div>
-
-                                <div
-                                  className={
-                                    theme
-                                      ? "share-video-data-row option-row"
-                                      : "share-video-data-row option-row preview-lightt"
-                                  }
-                                  onClick={() => {
-                                    handleCopyLink(element?._id);
-                                    setShowOptions(false);
-                                  }}
-                                >
-                                  <ShareOutlinedIcon
-                                    className={
-                                      theme
-                                        ? "video-edit-icons"
-                                        : "video-edit-icons-light"
-                                    }
-                                    fontSize="medium"
-                                    style={{
-                                      color: theme ? "#aaa" : "#606060",
-                                    }}
-                                  />
-                                  <p>Get shareable link</p>
-                                </div>
-
-                                <div
-                                  className={
-                                    theme
-                                      ? "download-video-data-row option-row"
-                                      : "download-video-data-row option-row preview-lightt"
-                                  }
-                                  onClick={() => {
-                                    downloadVideo(element?.ytUrl);
-                                    setShowOptions(false);
-                                  }}
-                                >
-                                  <KeyboardTabOutlinedIcon
-                                    className={
-                                      theme
-                                        ? "video-edit-icons"
-                                        : "video-edit-icons-light"
-                                    }
-                                    fontSize="medium"
-                                    style={{
-                                      color: theme ? "#aaa" : "#606060",
-                                      transform: "rotate(90deg)",
-                                    }}
-                                  />
-                                  <p>Download</p>
-                                </div>
-                                <div
-                                  className={
-                                    theme
-                                      ? "delete-video-data-row option-row"
-                                      : "delete-video-data-row option-row preview-lightt"
-                                  }
-                                  onClick={() => {
-                                    setDeleteVideo(element);
-                                    if (element?._id !== undefined) {
-                                      setShowOptions(false);
-                                      setIsDeleteClicked(true);
-                                      document.body.classList.add("bg-css2");
-                                    }
-                                  }}
-                                >
-                                  <DeleteOutlineOutlinedIcon
-                                    className={
-                                      theme
-                                        ? "video-edit-icons"
-                                        : "video-edit-icons-light"
-                                    }
-                                    fontSize="medium"
-                                    style={{
-                                      color: theme ? "#aaa" : "#606060",
-                                    }}
-                                  />
-                                  <p>Delete forever</p>
-                                </div>
-                              </div>
                             </div>
                           </div>
                         </td>
@@ -723,7 +520,6 @@ function Content(prop) {
                       <div className="currentthumbnail-data choosed-one">
                         <label htmlFor="thumbnail-upload">
                           <img
-                            // src={URL.createObjectURL(thumbnailImage)}
                             src={previewThumbnail}
                             alt="thumbnail"
                             className="currnt-tbimg2"
@@ -734,10 +530,6 @@ function Content(prop) {
                               borderRadius: "3px",
                               opacity: "1",
                             }}
-                            // onClick={() => {
-                            //   setThumbnailSelected(true);
-                            //   setFinalThumbnail(thumbnailImage);
-                            // }}
                           />
                         </label>
                       </div>
@@ -895,7 +687,6 @@ function Content(prop) {
             onClick={() => {
               setIsDeleteClicked(false);
               document.body.classList.remove("bg-css2");
-              // window.location.reload();
             }}
           >
             CANCEL
@@ -910,9 +701,7 @@ function Content(prop) {
             onClick={() => {
               if (boxclicked === true && deleteVideo) {
                 DeleteVideo(deleteVideo._id);
-                setTimeout(() => {
-                  window.location.reload();
-                }, 300);
+                setIsDeleteClicked(false);
               }
             }}
             style={{
@@ -923,47 +712,6 @@ function Content(prop) {
           >
             DELETE VIDEO
           </button>
-          {/* <div className="extra-two-delete-btns">
-            <button
-              className={
-                theme
-                  ? "cancel-delete delete-css"
-                  : "cancel-delete delete-css blue-txt"
-              }
-              onClick={() => {
-                setIsDeleteClicked(false);
-                document.body.classList.remove("bg-css2");
-                window.location.reload();
-              }}
-            >
-              CANCEL
-            </button>
-            <button
-              className={
-                theme
-                  ? "delete-video-btn delete-css"
-                  : `delete-video-btn delete-css ${
-                      !boxclicked ? "" : "blue-txt"
-                    }`
-              }
-              disabled={!boxclicked}
-              onClick={() => {
-                if (boxclicked === true && deleteVideo) {
-                  DeleteVideo(deleteVideo._id);
-                  setTimeout(() => {
-                    window.location.reload();
-                  }, 300);
-                }
-              }}
-              style={{
-                opacity: boxclicked === false ? 0.7 : 1,
-                color: boxclicked === false ? "#aaa" : "#3eaffe",
-                cursor: boxclicked === false ? "not-allowed" : "pointer",
-              }}
-            >
-              DELETE VIDEO
-            </button>
-          </div> */}
         </div>
       </div>
     </>
