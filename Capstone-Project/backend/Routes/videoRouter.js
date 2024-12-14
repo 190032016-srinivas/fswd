@@ -52,6 +52,14 @@ export function videoRouter(server) {
     } else res.status(200).json({ message: "updated successfully " });
   });
 
+  server.delete("/videos/:videoId", async (req, res) => {
+    const videoId = req.params.videoId;
+    const action = await validVideos.deleteOne({ _id: videoId });
+    if (action.deletedCount === 0) {
+      return res.status(400).json({ message: "video not found " });
+    } else res.status(200).json({ message: "deleted successfully " });
+  });
+
   server.get("/videos/channel/:channelId", async (req, res) => {
     const channelId = req.params.channelId;
     const videoData = await validVideos.find({ channelId: channelId });
