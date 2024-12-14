@@ -1,4 +1,5 @@
 import { validChannels } from "../Models/channel.js";
+import { validVideos } from "../Models/videos.js";
 
 export function channelRouter(server) {
   server.get("/channel/:userId", async (req, res) => {
@@ -45,9 +46,18 @@ export function channelRouter(server) {
         },
       }
     );
+    const result2 = await validVideos.updateMany(
+      { channelId: channelId },
+      {
+        $set: {
+          channelName: previewChannelName,
+          channelPhoto: previewChannelThumbnail,
+        },
+      }
+    );
     if (!result.acknowledged) {
       return res.status(400).json({ message: "channel not found " });
-    } else res.status(200).json({ message: "updated successfully " });
+    } else res.status(200).json({ message: "updated successfully ", result });
   });
 
   // server.post("/channel/add", async (req, res) => {
