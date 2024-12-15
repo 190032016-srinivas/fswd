@@ -27,7 +27,7 @@ and will soon be removed (this is only for the ease of eval for TAs)
 
 first of go to backend directory:`cd/backend`
 Install server dependencies:`npm install`
-Start the server:`npm start`
+Start the server:`npm start` or `node server.js'
 
 ### Client
 
@@ -35,4 +35,5 @@ first of go to frontend directory:`cd/frontend`
 Install client dependencies:`npm install`
 Start the client application:`npm run dev`
 
-Open your web browser and visit `http://localhost:5173` to access the application.
+Open CHROME WEB BROWSER and visit `http://localhost:5173` to access the application.
+there might be some compatibility issues with other browsers thank you .

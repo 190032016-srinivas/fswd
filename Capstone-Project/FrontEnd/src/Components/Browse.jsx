@@ -1,4 +1,4 @@
-import "../Css/browse.css";
+import "../Css/Browse.css";
 import { useEffect, useState } from "react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Tooltip from "@mui/material/Tooltip";
@@ -13,22 +13,14 @@ import useNotifications from "../useNotification.js";
 
 function Browse() {
   const backendURL = "http://localhost:3000";
-  const [thumbnails, setThumbnails] = useState();
   const [validVideos, setValidVideos] = useState();
-  const [Titles, setTitles] = useState();
-  const [uploader, setUploader] = useState();
-  const [ProfilePic, setProfilePic] = useState();
-  const [duration, setDuration] = useState();
-  const [VideoID, setVideoID] = useState();
-  const [Visibility, setVisibility] = useState();
+
   const [menuClicked, setMenuClicked] = useState(() => {
     const menu = localStorage.getItem("menuClicked");
     return menu ? JSON.parse(menu) : false;
   });
-  const [VideoViews, setVideoViews] = useState();
-  const [VideoData, setVideoData] = useState([]);
+
   const [TagsSelected, setTagsSelected] = useState("All");
-  const [publishDate, setPublishDate] = useState();
   const [FilteredVideos, setFilteredVideos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState(() => {
@@ -61,6 +53,13 @@ function Browse() {
       }
     };
   }, []);
+  useEffect(() => {
+    if (theme === false && !window.location.href.includes("/studio")) {
+      document.body.style.backgroundColor = "white";
+    } else if (theme === true && !window.location.href.includes("/studio")) {
+      document.body.style.backgroundColor = "0f0f0f";
+    }
+  }, [theme]);
 
   useEffect(() => {
     const handleMenuButtonClick = () => {

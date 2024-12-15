@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "../Css/accountPop.css";
+import "../Css/studio.css";
 import avatar from "../img/avatar.png";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import { storage } from "../Firebase.js";

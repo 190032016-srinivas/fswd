@@ -664,7 +664,7 @@ function ChannelDetails() {
               </>
             )}
             {isEditChannel && (
-              <div>
+              <>
                 <div
                   className="back-menu-edit"
                   onClick={() => setisEditChannel(false)}
@@ -778,7 +778,7 @@ function ChannelDetails() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </>
             )}
             {isAddVideo && (
               <div>

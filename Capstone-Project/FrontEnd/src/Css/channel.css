@@ -1551,6 +1551,12 @@
     flex-direction: column;
     align-items: center;
   }
+  .back-menu-edit{
+    top: 400px !important
+  }
+  .main-video-details-section{
+    top: 460px !important;
+  }
   .subscribethis-channel2,
   .subscribethis-channel,
   .subscribethis-channel2-light .subscribethis-channel,

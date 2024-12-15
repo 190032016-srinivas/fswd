@@ -855,21 +855,10 @@ function VideoSection() {
           </div>
         </div>
         <div className="recommended-section">
-          <div className="recommend-tags" style={{ paddingBottom: "10px" }}>
-            <div
-              className={`top-tags tag-one ${
-                theme ? "tag-color" : "tag-color-light"
-              }`}
-            >
-              <p>All</p>
-            </div>
-            <div
-              className={`top-tags tag-two ${theme ? "" : "tagcolor-newlight"}`}
-              style={{ marginLeft: "10px" }}
-            >
-              <p>Recommended</p>
-            </div>
-          </div>
+          <div
+            className="recommend-tags"
+            style={{ paddingBottom: "10px" }}
+          ></div>
           <div
             className="video-section2"
             style={{ display: "flex", gap: "10px" }}

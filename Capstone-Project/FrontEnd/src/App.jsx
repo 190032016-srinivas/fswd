@@ -27,25 +27,6 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const authToken = localStorage.getItem("authToken");
-    const userId = localStorage.getItem("userId");
-    const userPp = localStorage.getItem("userPp");
-    const userName = localStorage.getItem("userName");
-    const userEmail = localStorage.getItem("userName");
-    const channelId = localStorage.getItem("channelId");
-    const channelName = localStorage.getItem("channelName");
-    if (
-      !authToken ||
-      !userId ||
-      !userPp ||
-      !userName ||
-      !userEmail ||
-      !channelId ||
-      !channelName
-    ) {
-      dispatch(clearDetails());
-      localStorage.clear();
-    }
     dispatch(regainUserDetails());
   }, [dispatch]);
 
