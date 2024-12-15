@@ -27,6 +27,7 @@ function Content(prop) {
   const [previewTags, setPreviewTags] = useState("");
   const [previewYtUrl, setPreviewYtUrl] = useState("");
   const [previewThumbnail, setPreviewThumbnail] = useState(null);
+  const [previewDuration, setPreviewDuration] = useState(null);
   const [imgLoading, setImgLoading] = useState(false);
   const [menu, setmenu] = useState(() => {
     const menu = localStorage.getItem("studioMenuClicked");
@@ -137,12 +138,14 @@ function Content(prop) {
         window.location.reload();
         return;
       }
+
       let body = {
         previewTitle,
         previewYtUrl: getVideoId(previewYtUrl),
         previewTags,
         previewThumbnail,
         previewDescription,
+        previewDuration,
       };
       const response = await fetch(`${backendURL}/videos/${editVideoId}`, {
         method: "PUT",
@@ -353,6 +356,7 @@ function Content(prop) {
                                   setPreviewTags(element.Tag);
                                   setPreviewThumbnail(element.thumbnail);
                                   setPreviewYtUrl(element.ytUrl);
+                                  setPreviewDuration(element.duration);
                                   setIsEditClicked(true);
                                 }}
                               />
@@ -448,7 +452,9 @@ function Content(prop) {
                       previewDescription === "" ||
                       previewTags === "" ||
                       previewThumbnail === "" ||
-                      previewYtUrl === ""
+                      previewYtUrl === "" ||
+                      !previewDuration ||
+                      previewDuration === 0
                     ) {
                       ErrorNotify("Input fields can't be empty!");
                     } else {
@@ -569,7 +575,7 @@ function Content(prop) {
                     </div>
                     <div
                       className="currnt-video-tags-section"
-                      style={{ marginTop: "30px", marginBottom: "100px" }}
+                      style={{ marginTop: "30px" }}
                     >
                       <p className={theme ? "" : "text-light-mode"}>Url</p>
                       <p className={theme ? "" : "text-light-mode2"}>
@@ -589,6 +595,29 @@ function Content(prop) {
                           setPreviewYtUrl(e.target.value);
                         }}
                         placeholder="Add youtube url to your video."
+                        maxLength={200}
+                      />
+                    </div>
+                    <div
+                      className="currnt-video-tags-section"
+                      style={{ marginTop: "30px", marginBottom: "100px" }}
+                    >
+                      <p className={theme ? "" : "text-light-mode"}>Duration</p>
+
+                      <input
+                        type="number"
+                        name="video-title"
+                        className={
+                          theme
+                            ? "currentvid-tagsinp"
+                            : "currentvid-tagsinp new-light-border text-light-mode"
+                        }
+                        value={previewDuration}
+                        required
+                        onChange={(e) => {
+                          setPreviewDuration(e.target.value);
+                        }}
+                        placeholder="Add duration of your video."
                         maxLength={200}
                       />
                     </div>
