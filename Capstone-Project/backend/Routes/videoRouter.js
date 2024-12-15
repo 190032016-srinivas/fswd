@@ -2,11 +2,13 @@ import { validVideos } from "../Models/videos.js";
 
 export function videoRouter(server) {
   server.post("/videos/add", async (req, res) => {
-    const arr = req.body;
-    for (let videoDetails of arr) {
-      await validVideos.create(videoDetails);
+    const videoData = req.body;
+    const newVideo = await validVideos.create(videoData);
+    if (newVideo) {
+      return res.status(200).json({ message: "done", newVideo });
+    } else {
+      return res.status(200).json({ message: "could not create video" });
     }
-    res.status(200).json({ message: "done" });
   });
 
   server.get("/videos", async (req, res) => {
@@ -34,6 +36,7 @@ export function videoRouter(server) {
       previewTags,
       previewThumbnail,
       previewDescription,
+      previewDuration,
     } = req.body;
     const result = await validVideos.updateOne(
       { _id: videoId },
@@ -44,6 +47,7 @@ export function videoRouter(server) {
           Tag: previewTags,
           thumbnail: previewThumbnail,
           description: previewDescription,
+          duration: previewDuration > 5999 ? 5999 : previewDuration,
         },
       }
     );
