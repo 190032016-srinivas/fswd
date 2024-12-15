@@ -184,12 +184,7 @@ function Browse() {
                 );
               })}
             </div>
-            <div
-              className="video-section"
-              // style={{
-              //   marginLeft: menuClicked ? "40px" : "40px",
-              // }}
-            >
+            <div className="video-section">
               <div
                 className="uploaded-videos"
                 style={
@@ -306,13 +301,6 @@ function Browse() {
                       className="video-data"
                       key={index}
                       onClick={() => {
-                        // if (user?.success) {
-                        //   updateViews(element._id);
-                        //   setTimeout(() => {
-                        //     window.location.href = `/video/${element._id}`;
-                        //   }, 400);
-                        // }
-                        // window.location.href = element.ytUrl;
                         localStorage.setItem("menuClicked", false);
                         window.location.href = `/video/${element._id}`;
                       }}

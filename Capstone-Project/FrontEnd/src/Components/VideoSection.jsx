@@ -23,30 +23,14 @@ import useNotifications from "../useNotification";
 
 function VideoSection() {
   const backendURL = "http://localhost:3000";
-  // const { id } = useParams();
   const [videoData, setVideoData] = useState(null);
-  // const [channelName, setChannelName] = useState();
-  const [plyrInitialized, setPlyrInitialized] = useState(false);
-  const [Display, setDisplay] = useState("none");
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const [allVideos, setAllVideos] = useState([]);
-  const [isChannel, setisChannel] = useState();
-  const [shareClicked, setShareClicked] = useState(false);
-  const [usermail, setUserMail] = useState();
-  const [isSwitch, setisSwitched] = useState(false);
   const [showEditComment, setShowEditComment] = useState(false);
   const [editCommentValue, setEditComment] = useState("");
   const [editCommentId, setEditCommentId] = useState();
-
-  const [isbtnClicked, setisbtnClicked] = useState(false);
-  const [TagSelected, setTagSelected] = useState("All");
-  const [userVideos, setUserVideos] = useState([]);
-  const [checkTrending, setCheckTrending] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [recommendLoading, setRecommendLoading] = useState(true);
-  const [likeLoading, setLikeLoading] = useState(false);
-  const [seeDesc, setSeeDesc] = useState(false);
   const [commentLoading, setCommentLoading] = useState(false);
   const [commentOpacity, setCommentOpacity] = useState(1);
   const [theme, setTheme] = useState(() => {
@@ -54,41 +38,7 @@ function VideoSection() {
     return Dark ? JSON.parse(Dark) : true;
   });
 
-  //EXTRAS
-
-  const [thumbnails, setThumbnails] = useState();
-  const [Titles, setTitles] = useState();
-  const [Uploader, setUploader] = useState();
-  const [duration, setDuration] = useState();
-  const [VideoID, setVideoID] = useState();
-  const [Views, SetViews] = useState();
-  const [publishdate, setPublishDate] = useState();
-  const [VideoLikes, setVideoLikes] = useState();
-  const [commentLikes, setCommentLikes] = useState();
-  const [isLiked, setIsLiked] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
-  const [createPlaylistClicked, setcreatePlaylistClicked] = useState(false);
-  const [privacyClicked, setprivacyClicked] = useState(false);
-  const [playlistClicked, setPlaylistClicked] = useState(false);
-  const [privacy, setPrivacy] = useState("Public");
-  const [playlistName, setPlaylistName] = useState("");
-  const [UserPlaylist, setUserPlaylist] = useState([]);
-  const [playlistID, setplaylistID] = useState([]);
-  const [isHeart, setIsHeart] = useState([]);
-  const [rec, setRecommend] = useState(false);
-  const User = useSelector((state) => state.impDetailsStoreKey.impDetails);
-  const { user } = User;
-  //Get Channel Data
-  const [youtuberName, setyoutuberName] = useState();
-  const [youtuberProfile, setyoutuberProfile] = useState();
-  const [youtubeChannelID, setyoutubeChannelID] = useState();
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [Subscribers, setSubscribers] = useState();
-
-  //Signup user Profile Pic
-  const [userProfile, setUserProfile] = useState();
-
-  //TOAST FUNCTIONS
 
   const impDetails = useSelector(
     (state) => state.impDetailsStoreKey.impDetails
@@ -212,7 +162,7 @@ function VideoSection() {
         const allVideos = await response.json();
         setAllVideos(allVideos);
       } catch (error) {
-        ErrorNotify(errors);
+        ErrorNotify(error);
       }
     };
     getAllVideos();
@@ -667,7 +617,7 @@ function VideoSection() {
                     className="save-video-icon"
                   />
 
-                  <p>{isSaved === true ? "Saved" : "Save"}</p>
+                  <p>{"Save"}</p>
                 </div>
 
                 <div

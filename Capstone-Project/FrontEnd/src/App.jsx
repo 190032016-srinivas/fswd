@@ -1,16 +1,22 @@
-import Browse from "./Components/Browse";
 import Error from "./Components/Error";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import VideoSection from "./Components/VideoSection";
-import OtherChannel from "./Components/ChannelDetails";
-import SearchResults from "./Components/SearchResults";
 import { ToastContainer } from "react-toastify";
 import { Helmet } from "react-helmet";
 import ytLogo from "./img/icon.png";
 import { useSelector, useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { regainUserDetails } from "./reducer/impDetails";
+import LoadingComponent from "./Components/LoadingComponent.jsx";
+
+const Browse = React.lazy(() => import("./Components/Browse.jsx"));
+const VideoSection = React.lazy(() => import("./Components/VideoSection.jsx"));
+const SearchResults = React.lazy(() =>
+  import("./Components/SearchResults.jsx")
+);
+const ChannelDetails = React.lazy(() =>
+  import("./Components/ChannelDetails.jsx")
+);
 
 function App() {
   const impDetails = useSelector(
@@ -43,11 +49,46 @@ function App() {
           <link rel="icon" type="image/x-icon" href={ytLogo} />
         </Helmet>
         <Routes>
-          <Route path="/" element={<Browse />} />
-          <Route path="/home" element={<Browse />} />
-          <Route path="/channel/:channelId" element={<OtherChannel />} />
-          <Route path="/results/:data" element={<SearchResults />} />
-          <Route path="/video/:videoId" element={<VideoSection />} />
+          <Route
+            path="/"
+            element={
+              <Suspense fallback={LoadingComponent}>
+                <Browse />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/home"
+            element={
+              <Suspense fallback={LoadingComponent}>
+                <Browse />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/channel/:channelId"
+            element={
+              <Suspense fallback={LoadingComponent}>
+                <ChannelDetails />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/results/:data"
+            element={
+              <Suspense fallback={LoadingComponent}>
+                <SearchResults />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/video/:videoId"
+            element={
+              <Suspense fallback={LoadingComponent}>
+                <VideoSection />
+              </Suspense>
+            }
+          />
           <Route path="/*" element={<Error />} />
         </Routes>
       </BrowserRouter>

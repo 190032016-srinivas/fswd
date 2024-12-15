@@ -22,7 +22,7 @@ import Error from "./Error";
 import Content from "./Content";
 import { updateChannelDetails } from "../reducer/impDetails";
 import ChannelVideos from "./ChannelVideos";
-function OtherChannel() {
+function ChannelDetails() {
   const backendURL = "http://localhost:3000";
   const { channelId } = useParams();
   const [Email, setEmail] = useState();
@@ -59,8 +59,6 @@ function OtherChannel() {
   );
   const { userId, authToken } = impDetails;
   const { SuccessNotify, ErrorNotify } = useNotifications(theme);
-
-  //USE EFFECTS
 
   useEffect(() => {
     const getChannelData = async () => {
@@ -1032,4 +1030,4 @@ function OtherChannel() {
   );
 }
 
-export default OtherChannel;
+export default ChannelDetails;
