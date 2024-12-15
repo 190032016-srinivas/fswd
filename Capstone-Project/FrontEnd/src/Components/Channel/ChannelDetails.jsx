@@ -2,8 +2,12 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Navbar from "../Navbar";
 import LeftPanel from "../LeftPanel";
-import WestIcon from "@mui/icons-material/West";
+import { AiOutlineVideoCameraAdd } from "react-icons/ai";
+import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 
+import WestIcon from "@mui/icons-material/West";
+import { storage } from "../../Firebase";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import "../../Css/channel.css";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ChannelHome from "./ChannelHome";
@@ -22,10 +26,11 @@ import FeaturedChannels from "./FeaturedChannels";
 import { RiUserSettingsLine } from "react-icons/ri";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useNotifications from "../../useNotification";
 import Error from "../Error";
-import Content from "../Studio/Content";
+import Content from "../Studio/ChannelVideos";
+import { updateChannelDetails } from "../../reducer/impDetails";
 function OtherChannel() {
   const backendURL = "http://localhost:3000";
   const { channelId } = useParams();
@@ -35,16 +40,24 @@ function OtherChannel() {
   const [ChannelProfile, setChannelProfile] = useState();
   const [myVideos, setMyVideos] = useState([]);
   const [isEditChannel, setisEditChannel] = useState(false);
+  const [isAddVideo, setIsAddVideo] = useState(false);
   const [isSwitch, setisSwitched] = useState(false);
   const [previewChannelName, setPreviewChannelName] = useState("");
   const [previewChannelId, setPreviewChannelId] = useState("");
   const [previewChannelThumbnail, setPreviewChannelThumbnail] = useState(null);
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [previewDescription, setPreviewDescription] = useState("");
+  const [previewDuration, setPreviewDuration] = useState(null);
+  const [previewTags, setPreviewTags] = useState("");
+  const [previewYtUrl, setPreviewYtUrl] = useState("");
+  const [previewThumbnail, setPreviewThumbnail] = useState(null);
   const [Section, setSection] = useState("Home");
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [Subscribers, setSubscribers] = useState();
   const [Top, setTop] = useState("155px");
   const [coverIMG, setCoverIMG] = useState("");
   const [loading, setLoading] = useState(true);
+  const [imgLoading, setImgLoading] = useState(false);
   const [noChannel, setNoChannel] = useState(false);
   const [theme, setTheme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
@@ -55,18 +68,6 @@ function OtherChannel() {
   );
   const { userId, userPp, userName, userEmail, authToken } = impDetails;
   const { SuccessNotify, ErrorNotify } = useNotifications(theme);
-  //TOAST FUNCTIONS
-  const SubscribeNotify = () =>
-    toast.success("Channel subscribed!", {
-      position: "bottom-center",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: theme ? "dark" : "light",
-    });
 
   //USE EFFECTS
 
@@ -189,21 +190,56 @@ function OtherChannel() {
       }
     };
   }, []);
-
-  const handleThumbnailUpload = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const img = new Image();
-      img.onload = () => {
-        setPreviewChannelThumbnail(reader.result);
-      };
-      console.log("src generated=", reader.result);
-    };
-    if (file) {
-      reader.readAsDataURL(file);
+  useEffect(() => {
+    const thumbnailSection = document.querySelector(".currnt-tbimg2");
+    const thumbnailSectionPlaceholder = document.querySelector(
+      ".uploadnew-thumbnaill"
+    );
+    if (thumbnailSection) {
+      if (imgLoading) {
+        thumbnailSection.style.cursor = "wait";
+      } else {
+        thumbnailSection.style.cursor = "pointer";
+      }
     }
+    if (thumbnailSectionPlaceholder) {
+      if (imgLoading) {
+        thumbnailSectionPlaceholder.style.cursor = "wait";
+      } else {
+        thumbnailSectionPlaceholder.style.cursor = "pointer";
+      }
+    }
+  }, [imgLoading]);
+  const handleThumbnailUpload = async (e) => {
+    setImgLoading(true);
+    const file = e.target.files[0];
+
+    const fileReference = ref(storage, `profile/${file.name}`);
+    const uploadData = uploadBytesResumable(fileReference, file);
+    uploadData.on(
+      "state_changed",
+      null,
+      (error) => {
+        ErrorNotify(error);
+        setImgLoading(false);
+        return;
+      },
+      async () => {
+        try {
+          const downloadURL = await getDownloadURL(uploadData.snapshot.ref);
+          setPreviewChannelThumbnail(downloadURL);
+          setPreviewThumbnail(downloadURL);
+          console.log("src gene=", downloadURL);
+          setImgLoading(false);
+        } catch (error) {
+          ErrorNotify(error);
+          setImgLoading(false);
+          return;
+        }
+      }
+    );
   };
+  const dispatch = useDispatch();
   async function EditChannel() {
     try {
       if (!previewChannelId) {
@@ -213,6 +249,7 @@ function OtherChannel() {
       let body = {
         previewChannelName,
         previewChannelThumbnail,
+        channelId,
       };
       const response = await fetch(
         `${backendURL}/channel/${previewChannelId}`,
@@ -226,6 +263,14 @@ function OtherChannel() {
         }
       );
       if (response.ok) {
+        dispatch(
+          updateChannelDetails({
+            previewChannelName,
+            previewChannelThumbnail,
+          })
+        );
+        localStorage.setItem("userPp", previewChannelThumbnail);
+        localStorage.setItem("channelName", previewChannelName);
         SuccessNotify("Channel Edited.");
       } else {
         ErrorNotify("Could not edit channel");
@@ -234,9 +279,59 @@ function OtherChannel() {
       ErrorNotify(error.message);
     } finally {
       setisEditChannel(false);
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 1200);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1200);
+    }
+  }
+  const getVideoId = (url) => {
+    const regex =
+      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const match = url.match(regex);
+    return match && match[1] ? match[1] : url;
+  };
+  async function CreateVideo() {
+    try {
+      if (!previewChannelId) {
+        window.location.reload();
+        return;
+      }
+
+      let body = {
+        title: previewTitle,
+        ytUrl: getVideoId(previewYtUrl),
+        Tag: previewTags,
+        thumbnail: previewThumbnail,
+        channelId,
+        channelName,
+        channelPhoto: ChannelProfile,
+        views: 12700,
+        likes: 1254,
+        dislikes: 55,
+        duration: previewDuration > 5999 ? 5999 : previewDuration,
+        description: previewDescription,
+      };
+      const response = await fetch(`${backendURL}/videos/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify(body),
+      });
+      if (response.ok) {
+        SuccessNotify("Video added.");
+      } else {
+        ErrorNotify("Could not create video");
+      }
+    } catch (error) {
+      ErrorNotify(error.message);
+    } finally {
+      setisEditChannel(false);
+      setIsAddVideo(false);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1200);
     }
   }
   return (
@@ -457,33 +552,38 @@ function OtherChannel() {
                         }
                         onClick={() => {
                           setisEditChannel(true);
+                          setPreviewChannelName(channelName);
+                          setPreviewChannelThumbnail(ChannelProfile);
+                          setIsAddVideo(false);
                         }}
                       >
                         Edit channel
                       </button>
-
-                      <div
-                        className="setting-btn"
+                      <button
+                        className={
+                          theme
+                            ? "customize-channel"
+                            : "customize-channel btn-light-mode"
+                        }
                         onClick={() => {
-                          setisEditChannel(true);
+                          setisEditChannel(false);
+                          setPreviewTitle("");
+                          setPreviewDescription("");
+                          setPreviewTags("");
+                          setPreviewThumbnail(null);
+                          setPreviewYtUrl("");
+                          setPreviewDuration("");
+                          setIsAddVideo(true);
                         }}
                       >
-                        <RiUserSettingsLine
-                          fontSize="28px"
-                          color={theme ? "white" : "black"}
-                          className={
-                            theme
-                              ? "channel-settings"
-                              : "channel-settings channel-settings-light"
-                          }
-                        />
-                      </div>
+                        Add video
+                      </button>
                     </div>
                   )}
                 </div>
               </div>
             </div>
-            {!isEditChannel && (
+            {!isEditChannel && !isAddVideo && (
               <>
                 <div className="channel-mid-content">
                   <div className="different-sections">
@@ -607,7 +707,7 @@ function OtherChannel() {
                           : "current-tophead text-light-mode"
                       }
                     >
-                      Video details
+                      Channel details
                     </p>
                     <div className="thissection-btns">
                       <button
@@ -686,7 +786,250 @@ function OtherChannel() {
                               accept="image/*"
                               id="thumbnail-upload"
                               style={{ display: "none" }}
+                              disabled={imgLoading}
                               onChange={handleThumbnailUpload}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {isAddVideo && (
+              <div>
+                <div
+                  className="back-menu-edit"
+                  onClick={() => setIsAddVideo(false)}
+                >
+                  <WestIcon fontSize="medium" style={{ color: "#aaa" }} />
+                </div>
+
+                <div
+                  className="main-video-details-section"
+                  style={{
+                    opacity: 1,
+                    pointerEvents: "auto",
+                    transition: "all .12s ease",
+                    cursor: loading ? "wait" : "auto",
+                    width: "100%",
+                  }}
+                >
+                  <div className="current-editvideodata">
+                    <p
+                      className={
+                        theme
+                          ? "current-tophead"
+                          : "current-tophead text-light-mode"
+                      }
+                    >
+                      New video details
+                    </p>
+                    <div className="thissection-btns">
+                      <button
+                        className={"video-editbtnss"}
+                        onClick={() => {
+                          if (
+                            previewTitle === "" ||
+                            previewDescription === "" ||
+                            previewTags === "" ||
+                            previewThumbnail === "" ||
+                            previewYtUrl === "" ||
+                            !previewDuration ||
+                            previewDuration === 0
+                          ) {
+                            ErrorNotify("Input fields can't be empty!");
+                          } else {
+                            CreateVideo();
+                          }
+                        }}
+                      >
+                        SAVE
+                      </button>
+                    </div>
+                  </div>
+                  <div className="current-editvideo-data">
+                    <div className="video-details-left">
+                      <div className="current-video-editable-section">
+                        <div className="currentvideo-title">
+                          <input
+                            type="text"
+                            name="video-title"
+                            className={
+                              theme
+                                ? "currentvideo-title-inp"
+                                : "currentvideo-title-inp text-light-mode new-light-border"
+                            }
+                            value={previewTitle}
+                            required
+                            onChange={(e) => {
+                              setPreviewTitle(e.target.value);
+                            }}
+                            placeholder="Add a title that describes your video"
+                            maxLength={100}
+                          />
+                          <p className="title-sample-txt">Title (required)</p>
+                        </div>
+                        <div className="currentvideo-desc">
+                          <textarea
+                            type="text"
+                            name="video-desc"
+                            required
+                            className={
+                              theme
+                                ? "currentvideo-desc-inp"
+                                : "currentvideo-desc-inp new-light-border text-light-mode"
+                            }
+                            onChange={(e) => {
+                              setPreviewDescription(e.target.value);
+                            }}
+                            placeholder="Tell viewers about your video"
+                            value={previewDescription}
+                            maxLength={5000}
+                          />
+                          <p
+                            className={
+                              theme
+                                ? "desc-sample-txt"
+                                : "desc-sample-txt desc-light-mode"
+                            }
+                          >
+                            Description
+                          </p>
+                        </div>
+                        <div className="currentvideo-thumbnailedit">
+                          <p className={theme ? "" : "text-light-mode"}>
+                            Thumbnail
+                          </p>
+                          <p className={theme ? "" : "text-light-mode2"}>
+                            Select or upload a picture that shows what&apos;s in
+                            your video. A good thumbnail stands out and draws
+                            viewers&apos; attention.
+                          </p>
+                          <div className="mythumbnails-sectionn">
+                            <div className="currentthumbnail-data choosed-one">
+                              {previewThumbnail && (
+                                <label htmlFor="thumbnail-upload">
+                                  <img
+                                    src={previewThumbnail}
+                                    alt="thumbnail"
+                                    className="currnt-tbimg2"
+                                    style={{
+                                      border: `2.2px solid ${
+                                        theme ? "white" : "#606060"
+                                      }`,
+                                      borderRadius: "3px",
+                                      opacity: "1",
+                                    }}
+                                  />
+                                </label>
+                              )}
+                              {!previewThumbnail && (
+                                <label
+                                  htmlFor="thumbnail-upload"
+                                  className={
+                                    theme
+                                      ? "uploadnew-thumbnaill"
+                                      : "uploadnew-thumbnaill new-light-border2"
+                                  }
+                                >
+                                  <AddPhotoAlternateOutlinedIcon
+                                    fontSize="medium"
+                                    style={{ color: "#aaa" }}
+                                  />
+                                  <p>Upload thumbnail</p>
+                                </label>
+                              )}
+                            </div>
+
+                            <input
+                              type="file"
+                              accept="image/*"
+                              id="thumbnail-upload"
+                              style={{ display: "none" }}
+                              onChange={handleThumbnailUpload}
+                              disabled={imgLoading}
+                            />
+                          </div>
+                          <div
+                            className="currnt-video-tags-section"
+                            style={{ marginTop: "30px" }}
+                          >
+                            <p className={theme ? "" : "text-light-mode"}>
+                              Tags
+                            </p>
+                            <p className={theme ? "" : "text-light-mode2"}>
+                              Add multiple tags just using a comma to seperate
+                              them.
+                            </p>
+                            <input
+                              type="text"
+                              name="video-title"
+                              className={
+                                theme
+                                  ? "currentvid-tagsinp"
+                                  : "currentvid-tagsinp new-light-border text-light-mode"
+                              }
+                              value={previewTags}
+                              required
+                              onChange={(e) => {
+                                setPreviewTags(e.target.value);
+                              }}
+                              placeholder="Add tags to rank your video up"
+                              maxLength={200}
+                            />
+                          </div>
+                          <div
+                            className="currnt-video-tags-section"
+                            style={{ marginTop: "30px" }}
+                          >
+                            <p className={theme ? "" : "text-light-mode"}>
+                              Url
+                            </p>
+                            <p className={theme ? "" : "text-light-mode2"}>
+                              Make sure to add a valid Url.
+                            </p>
+                            <input
+                              type="text"
+                              name="video-title"
+                              className={
+                                theme
+                                  ? "currentvid-tagsinp"
+                                  : "currentvid-tagsinp new-light-border text-light-mode"
+                              }
+                              value={previewYtUrl}
+                              required
+                              onChange={(e) => {
+                                setPreviewYtUrl(e.target.value);
+                              }}
+                              placeholder="Add youtube url to your video."
+                              maxLength={200}
+                            />
+                          </div>
+                          <div
+                            className="currnt-video-tags-section"
+                            style={{ marginTop: "30px", marginBottom: "100px" }}
+                          >
+                            <p className={theme ? "" : "text-light-mode"}>
+                              Duration
+                            </p>
+
+                            <input
+                              type="number"
+                              name="video-title"
+                              className={
+                                theme
+                                  ? "currentvid-tagsinp"
+                                  : "currentvid-tagsinp new-light-border text-light-mode"
+                              }
+                              value={previewDuration}
+                              required
+                              onChange={(e) => {
+                                setPreviewDuration(e.target.value);
+                              }}
+                              placeholder="Add duration of your video."
+                              maxLength={200}
                             />
                           </div>
                         </div>
