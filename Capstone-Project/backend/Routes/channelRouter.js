@@ -60,11 +60,17 @@ export function channelRouter(server) {
     } else res.status(200).json({ message: "updated successfully ", result });
   });
 
-  // server.post("/channel/add", async (req, res) => {
-  //   const arr = req.body;
-  //   for (let channelDetails of arr) {
-  //     const newChannel = await validChannels.create(channelDetails);
-  //   }
-  //   res.status(200).json({ message: "new channel created",newChannel });
-  // });
+  server.post("/channel/add", async (req, res) => {
+    const channelDetails = req.body;
+
+    const newChannel = await validChannels.create(channelDetails);
+
+    if (newChannel) {
+      return res
+        .status(200)
+        .json({ message: "new channel created", newChannel });
+    } else {
+      return res.status(400).json({ message: "Could not create channel" });
+    }
+  });
 }
