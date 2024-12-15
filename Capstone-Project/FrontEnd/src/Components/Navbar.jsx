@@ -5,6 +5,7 @@ import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import AccountPop from "./AccountPop.jsx";
 import "react-loading-skeleton/dist/skeleton.css";
 import "../Css/navbar.css";
+import "../Css/theme.css";
 import Logo from "../img/logo1.png";
 import Logo2 from "../img/logo2.png";
 import { useEffect, useState, useRef } from "react";

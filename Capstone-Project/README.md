@@ -7,8 +7,9 @@ this is a combination of both front end and backend complete
 
 User Authentication using JWT.
 Image storage using Firebase Storage.
-Responsive design for mobile and desktop.
+Responsive design for mobile(>375px) and desktop.
 Rest apis for efficient backend.
+lazyloading for faster frontend.
 mui icons for overall appeal.
 
 ## Configuration
