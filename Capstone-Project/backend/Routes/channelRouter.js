@@ -37,40 +37,63 @@ export function channelRouter(server) {
   server.put("/channel/:channelId", async (req, res) => {
     const channelId = req.params.channelId;
     const { previewChannelName, previewChannelThumbnail } = req.body;
-    const result = await validChannels.updateOne(
-      { _id: channelId },
-      {
-        $set: {
-          name: previewChannelName,
-          profilePic: previewChannelThumbnail,
-        },
+
+    try {
+      const result = await validChannels.updateOne(
+        { _id: channelId },
+        {
+          $set: {
+            name: previewChannelName,
+            profilePic: previewChannelThumbnail,
+          },
+        }
+      );
+
+      const result2 = await validVideos.updateMany(
+        { channelId: channelId },
+        {
+          $set: {
+            channelName: previewChannelName,
+            channelPhoto: previewChannelThumbnail,
+          },
+        }
+      );
+
+      if (!result.acknowledged) {
+        return res.status(400).json({ message: "Channel not found" });
       }
-    );
-    const result2 = await validVideos.updateMany(
-      { channelId: channelId },
-      {
-        $set: {
-          channelName: previewChannelName,
-          channelPhoto: previewChannelThumbnail,
-        },
-      }
-    );
-    if (!result.acknowledged) {
-      return res.status(400).json({ message: "channel not found " });
-    } else res.status(200).json({ message: "updated successfully ", result });
+
+      res.status(200).json({ message: "Updated successfully", result });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        message: "An error occurred while updating the channel",
+        error: error.message,
+      });
+    }
   });
 
   server.post("/channel/add", async (req, res) => {
     const channelDetails = req.body;
 
-    const newChannel = await validChannels.create(channelDetails);
+    try {
+      const newChannel = await validChannels.create(channelDetails);
 
-    if (newChannel) {
+      if (newChannel) {
+        return res
+          .status(200)
+          .json({ message: "New channel created", newChannel });
+      } else {
+        return res.status(400).json({ message: "Could not create channel" });
+      }
+    } catch (error) {
+      console.error(error);
       return res
-        .status(200)
-        .json({ message: "new channel created", newChannel });
-    } else {
-      return res.status(400).json({ message: "Could not create channel" });
+        .status(500)
+        .json({
+          message: "An error occurred while creating the channel",
+          error: error.message,
+        });
     }
   });
 }
