@@ -2,35 +2,25 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import LeftPanel from "./LeftPanel";
-import { AiOutlineVideoCameraAdd } from "react-icons/ai";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 
 import WestIcon from "@mui/icons-material/West";
 import { storage } from "../Firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import "../../Css/channel.css";
+import "../Css/channel.css";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import ChannelHome from "./ChannelHome";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import ChannelVideos from "./ChannelVideos";
-import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import Tooltip from "@mui/material/Tooltip";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Zoom from "@mui/material/Zoom";
-import Signup from "./Signup";
-import Signin from "./Signin";
-import ChannelAbout from "./ChannelAbout";
-import ChannelPlaylists from "./ChannelPlaylists";
-import FeaturedChannels from "./FeaturedChannels";
-import { RiUserSettingsLine } from "react-icons/ri";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import useNotifications from "../useNotification";
 import Error from "./Error";
-import Content from "../Studio/ChannelVideos";
+import Content from "./Content";
 import { updateChannelDetails } from "../reducer/impDetails";
+import ChannelVideos from "./ChannelVideos";
 function OtherChannel() {
   const backendURL = "http://localhost:3000";
   const { channelId } = useParams();
@@ -66,7 +56,7 @@ function OtherChannel() {
   const impDetails = useSelector(
     (state) => state.impDetailsStoreKey.impDetails
   );
-  const { userId, userPp, userName, userEmail, authToken } = impDetails;
+  const { userId, authToken } = impDetails;
   const { SuccessNotify, ErrorNotify } = useNotifications(theme);
 
   //USE EFFECTS
@@ -91,7 +81,7 @@ function OtherChannel() {
           }
         }
       } catch (error) {
-        ErrorNotify(error.message);
+        ErrorNotify(error);
         setNoChannel(true);
       } finally {
         setLoading(false);
@@ -117,7 +107,7 @@ function OtherChannel() {
           setMyVideos(myvideos);
         }
       } catch (error) {
-        ErrorNotify(error.message);
+        ErrorNotify(error);
       }
     };
     getUserVideos();
@@ -129,10 +119,6 @@ function OtherChannel() {
       document.body.style.backgroundColor = "0f0f0f";
     }
   }, [theme]);
-
-  const getUsername = (email) => {
-    return email.split("@")[0];
-  };
 
   const username = channelName;
   const [menuClicked, setMenuClicked] = useState(() => {
@@ -229,7 +215,6 @@ function OtherChannel() {
           const downloadURL = await getDownloadURL(uploadData.snapshot.ref);
           setPreviewChannelThumbnail(downloadURL);
           setPreviewThumbnail(downloadURL);
-          console.log("src gene=", downloadURL);
           setImgLoading(false);
         } catch (error) {
           ErrorNotify(error);
@@ -276,7 +261,7 @@ function OtherChannel() {
         ErrorNotify("Could not edit channel");
       }
     } catch (error) {
-      ErrorNotify(error.message);
+      ErrorNotify(error);
     } finally {
       setisEditChannel(false);
       setTimeout(() => {
@@ -325,7 +310,7 @@ function OtherChannel() {
         ErrorNotify("Could not create video");
       }
     } catch (error) {
-      ErrorNotify(error.message);
+      ErrorNotify(error);
     } finally {
       setisEditChannel(false);
       setIsAddVideo(false);
