@@ -148,14 +148,6 @@ function Browse() {
   //   }, 3600);
   // }, []);
 
-  useEffect(() => {
-    if (theme === false && !window.location.href.includes("/studio")) {
-      document.body.style.backgroundColor = "white";
-    } else if (theme === true && !window.location.href.includes("/studio")) {
-      document.body.style.backgroundColor = "0f0f0f";
-    }
-  }, [theme]);
-
   //UPDATE VIEWS
 
   const updateViews = async (id) => {
