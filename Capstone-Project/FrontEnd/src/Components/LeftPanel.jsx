@@ -19,6 +19,7 @@ import { HiOutlineFire } from "react-icons/hi";
 import { MdOutlineSubscriptions } from "react-icons/md";
 import { MdOutlineVideoLibrary } from "react-icons/md";
 import { useSelector } from "react-redux";
+import useNotifications from "../useNotification";
 
 function LeftPanel() {
   const backendURL = "http://localhost:3000";
@@ -46,7 +47,6 @@ function LeftPanel() {
   useEffect(() => {
     const handleMenuButtonClick = () => {
       if (window.innerWidth >= 860) {
-        console.log("clicking toggle in leftpanel as >860");
         setMenuClicked((prevMenuClicked) => !prevMenuClicked);
       } else {
         document.body.classList.add("bg-css");
@@ -89,12 +89,11 @@ function LeftPanel() {
   }, []);
 
   useEffect(() => {
-    console.log("useefect tirggers in leftpael", menuClicked);
     localStorage.setItem("menuClicked", JSON.stringify(menuClicked));
   }, [menuClicked]);
 
   const selected = localStorage.getItem("selected");
-
+  const { ErrorNotify } = useNotifications(theme);
   useEffect(() => {
     const getSubscriptions = async () => {
       try {
@@ -106,7 +105,7 @@ function LeftPanel() {
           setSubscriptions(result);
         }
       } catch (error) {
-        console.log(error.message);
+        ErrorNotify(error);
       }
     };
 
@@ -124,7 +123,7 @@ function LeftPanel() {
           setPlaylistData(playlistData);
         }
       } catch (error) {
-        console.log(error.message);
+        ErrorNotify(error)
       }
     };
     return () => getPlaylistData();
@@ -141,7 +140,7 @@ function LeftPanel() {
           setSavedPlaylist(matchingPlaylists);
         }
       } catch (error) {
-        console.log(error.message);
+        ErrorNotify(error)
       }
     };
 

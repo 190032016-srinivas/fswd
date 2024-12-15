@@ -61,7 +61,7 @@ function Signup(prop) {
         ErrorNotify(message);
       }
     } catch (error) {
-      ErrorNotify(error.message);
+      ErrorNotify(error);
     }
   };
 

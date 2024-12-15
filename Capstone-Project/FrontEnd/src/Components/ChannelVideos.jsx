@@ -54,7 +54,6 @@ function ChannelVideos(prop) {
           try {
             const downloadURL = await getDownloadURL(uploadData.snapshot.ref);
             setPreviewThumbnail(downloadURL);
-            console.log("src gene=", downloadURL);
             setImgLoading(false);
           } catch (error) {
             ErrorNotify(error);
@@ -101,7 +100,7 @@ function ChannelVideos(prop) {
           ErrorNotify("Could not edit video");
         }
       } catch (error) {
-        ErrorNotify(error.message);
+        ErrorNotify(error);
       } finally {
         setIsEditClicked(false);
         setTimeout(() => {

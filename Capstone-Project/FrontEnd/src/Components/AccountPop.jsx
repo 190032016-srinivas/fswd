@@ -82,7 +82,6 @@ function AccountPop() {
         try {
           const downloadURL = await getDownloadURL(uploadData.snapshot.ref);
           setPreviewImage(downloadURL);
-          console.log("src gene=", downloadURL);
           setImgLoading(false);
         } catch (error) {
           ErrorNotify(error);
@@ -141,7 +140,7 @@ function AccountPop() {
         ErrorNotify("Could not create channel");
       }
     } catch (error) {
-      ErrorNotify(error.message);
+      ErrorNotify(error);
     } finally {
       setTimeout(() => {
         window.location.reload();

@@ -70,30 +70,6 @@ function Navbar() {
     };
   }, []);
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       if (user?.email) {
-  //         const response = await fetch(
-  //           `${backendURL}/getuserimage/${user?.email}`
-  //         );
-  //         const { channelIMG } = await response.json();
-  //         setProfilePic(channelIMG);
-  //       }
-  //     } catch (error) {
-  //      console.log(error.message);
-  //     }
-  //   };
-
-  //   getData();
-  // }, [user?.email]);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //   }, 2500);
-  // }, []);
-
   const handleSearch = (e) => {
     setData(e.target.value);
   };

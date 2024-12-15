@@ -7,7 +7,6 @@ function Error() {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
-  console.log("fuck all route");
 
   return (
     <>

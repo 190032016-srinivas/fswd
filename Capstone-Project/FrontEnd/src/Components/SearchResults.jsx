@@ -59,7 +59,7 @@ function SearchResults() {
         const filteredVideos = await response.json();
         setsearchedVideoData(filteredVideos);
       } catch (error) {
-        ErrorNotify(error.message);
+        ErrorNotify(error);
       } finally {
         setLoading(false);
       }
@@ -88,7 +88,6 @@ function SearchResults() {
   }, []);
   useEffect(() => {
     const handleMenuButtonClick = () => {
-      console.log("clicking close side bar");
       setMenuClicked((prevMenuClicked) => !prevMenuClicked);
     };
 

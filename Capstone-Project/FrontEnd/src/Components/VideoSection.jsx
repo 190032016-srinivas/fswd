@@ -96,7 +96,6 @@ function VideoSection() {
   const { userId, userPp, authToken, channelId, channelName } = impDetails;
 
   const videoId = useParams().videoId;
-  console.log("videoid=", videoId);
   const opts = {
     playerVars: {
       autoplay: 1,
@@ -112,7 +111,7 @@ function VideoSection() {
         setComments(comments);
       }
     } catch (error) {
-      console.log("error in fetching channel id ", error);
+      ErrorNotify(error);
     } finally {
       setComment("");
       setCommentLoading(false);
@@ -127,7 +126,7 @@ function VideoSection() {
           setVideoData(videoData);
         }
       } catch (error) {
-        console.log("error in fetching channel id ", error);
+        ErrorNotify(error);
       } finally {
         setLoading(false);
       }
@@ -161,7 +160,7 @@ function VideoSection() {
         ErrorNotify("Could not add comment");
       }
     } catch (error) {
-      ErrorNotify(error.message);
+      ErrorNotify(error);
     }
   }
   async function DeleteComment(id) {
@@ -213,7 +212,7 @@ function VideoSection() {
         const allVideos = await response.json();
         setAllVideos(allVideos);
       } catch (error) {
-        console.log("error in fetching videos=", error);
+        ErrorNotify(errors);
       }
     };
     getAllVideos();
