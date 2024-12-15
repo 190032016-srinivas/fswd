@@ -1,25 +1,13 @@
 import Browse from "./Components/Browse";
-import Studio from "./Components/Studio";
 import Error from "./Components/Error";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import VideoSection from "./Components/VideoSection";
-import WatchLater from "./Components/WatchLater";
 import OtherChannel from "./Components/Channel/ChannelDetails";
-import Subscriptions from "./Components/Subscriptions";
-import Trending from "./Components/Trending";
 import SearchResults from "./Components/SearchResults";
-import Playlists from "./Components/Playlists";
-import Library from "./Components/Library";
-import Customization from "./Components/Studio/Customization";
-import Content from "./Components/Studio/ChannelVideos";
-import VideoDetails from "./Components/Studio/VideoDetails";
-import Comments from "./Components/Studio/Comments";
-import VideoComments from "./Components/Studio/VideoComments";
 import { ToastContainer } from "react-toastify";
 import { Helmet } from "react-helmet";
 import ytLogo from "./img/icon.png";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUserData } from "./reducer/user";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import { regainUserDetails } from "./reducer/impDetails";
@@ -57,42 +45,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Browse />} />
           <Route path="/home" element={<Browse />} />
-          <Route path="/studio" element={userId ? <Studio /> : <Error />} />
-          <Route
-            path="/studio/customize"
-            element={userId ? <Customization /> : <Error />}
-          />
-          <Route
-            path="/studio/video"
-            element={userId ? <Content /> : <Error />}
-          />
-          <Route
-            path="/studio/comments"
-            element={userId ? <Comments /> : <Error />}
-          />
-          <Route
-            path="/studio/video/edit/:id"
-            element={userId ? <VideoDetails /> : <Error />}
-          />
-          <Route
-            path="/studio/video/comments/:id"
-            element={userId ? <VideoComments /> : <Error />}
-          />
-
-          <Route
-            path="/watchlater"
-            element={userId ? <WatchLater /> : <Error />}
-          />
-
-          <Route path="/library" element={userId ? <Library /> : <Error />} />
           <Route path="/channel/:channelId" element={<OtherChannel />} />
-          <Route path="/trending" element={<Trending />} />
           <Route path="/results/:data" element={<SearchResults />} />
-          <Route path="/playlist/:id" element={<Playlists />} />
-          <Route
-            path="/subscriptions"
-            element={userId ? <Subscriptions /> : <Error />}
-          />
           <Route path="/video/:videoId" element={<VideoSection />} />
           <Route path="/*" element={<Error />} />
         </Routes>
