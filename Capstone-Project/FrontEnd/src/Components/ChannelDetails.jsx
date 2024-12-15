@@ -8,6 +8,7 @@ import WestIcon from "@mui/icons-material/West";
 import { storage } from "../Firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import "../Css/channel.css";
+import "../Css/Studio/videodetails.css";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";

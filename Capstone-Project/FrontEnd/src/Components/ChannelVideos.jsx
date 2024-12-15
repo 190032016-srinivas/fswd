@@ -1,13 +1,9 @@
-import "../../Css/Studio/channelvideos.css";
-import WestIcon from "@mui/icons-material/West";
-import { storage } from "../../Firebase";
+import "../Css/Studio/channelvideos.css";
+import { storage } from "../Firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { useSelector } from "react-redux";
-import useNotifications from "../../useNotification";
 
 function ChannelVideos(prop) {
   const backendURL = "http://localhost:3000";
