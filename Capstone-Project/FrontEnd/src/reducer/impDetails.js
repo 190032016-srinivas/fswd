@@ -28,7 +28,6 @@ export const impDetailsSlice = createSlice({
       state.status = "succeeded";
     },
     saveUserDetails: (state, action) => {
-      console.log("payload=", action.payload);
       const { authToken, userDetails, existingChannel } = action.payload;
       state.impDetails.authToken = authToken;
       state.impDetails.userId = userDetails?._id;
@@ -39,6 +38,15 @@ export const impDetailsSlice = createSlice({
       state.impDetails.channelName = existingChannel?.name;
       state.status = "succeeded";
     },
+    updateChannelDetails: (state, action) => {
+      const { previewChannelName, previewChannelThumbnail, channelId } =
+        action.payload;
+      state.impDetails.userPp = previewChannelThumbnail;
+      state.impDetails.channelName = previewChannelName;
+      state.impDetails.channelId = channelId;
+
+      state.status = "succeeded";
+    },
 
     clearDetails: (state, action) => {
       state.impDetails = {};
@@ -46,6 +54,10 @@ export const impDetailsSlice = createSlice({
   },
 });
 
-export const { regainUserDetails, saveUserDetails, clearDetails } =
-  impDetailsSlice.actions;
+export const {
+  regainUserDetails,
+  saveUserDetails,
+  clearDetails,
+  updateChannelDetails,
+} = impDetailsSlice.actions;
 export default impDetailsSlice.reducer;
