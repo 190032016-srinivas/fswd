@@ -8,10 +8,13 @@ this is a combination of both front end and backend complete
 User Authentication using JWT.
 Image storage using Firebase Storage.
 Responsive design for mobile and desktop.
-Rest apis for efficient backend
-mui icons for overall appeal
+Rest apis for efficient backend.
+mui icons for overall appeal.
 
 ## Configuration
+
+note: for the time being i have included my own atlas db name and password for easy acccess
+and will soon be removed (this is only for the ease of eval for TAs)
 
 1. Create a `.env` file in the root directory of your project.
 2. Add necessary environment variables to the `.env` file, such as database connection URLs, API keys, or other sensitive data.
@@ -21,22 +24,14 @@ mui icons for overall appeal
 
 ### Server
 
-Install server dependencies:
-
-`npm install`
-
-Start the server:
-
-`npm start`
+first of go to backend directory:`cd/backend`
+Install server dependencies:`npm install`
+Start the server:`npm start`
 
 ### Client
 
-Install client dependencies:
-
-`npm install`
-
-Start the client application:
-
-`npm run dev`
+first of go to frontend directory:`cd/frontend`
+Install client dependencies:`npm install`
+Start the client application:`npm run dev`
 
 Open your web browser and visit `http://localhost:5173` to access the application.
