@@ -51,18 +51,16 @@ function VideoSection() {
   const [isChannel, setisChannel] = useState();
   const [shareClicked, setShareClicked] = useState(false);
   const [usermail, setUserMail] = useState();
-  const [channelID, setChannelID] = useState();
   const [isSwitch, setisSwitched] = useState(false);
   const [showEditComment, setShowEditComment] = useState(false);
   const [editCommentValue, setEditComment] = useState("");
   const [editCommentId, setEditCommentId] = useState();
 
   const [isbtnClicked, setisbtnClicked] = useState(false);
-  const videoRef = useRef(null);
   const [TagSelected, setTagSelected] = useState("All");
   const [userVideos, setUserVideos] = useState([]);
   const [checkTrending, setCheckTrending] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [recommendLoading, setRecommendLoading] = useState(true);
   const [likeLoading, setLikeLoading] = useState(false);
   const [seeDesc, setSeeDesc] = useState(false);
@@ -109,78 +107,10 @@ function VideoSection() {
 
   //TOAST FUNCTIONS
 
-  const playlistNotify = () =>
-    toast.success("Video added to the playlist!", {
-      position: "bottom-center",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: theme ? "dark" : "light",
-    });
-
-  const watchLaterNotify = () =>
-    toast.success("Video saved to watch later!", {
-      position: "bottom-center",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: theme ? "dark" : "light",
-    });
-
-  const LikedNotify = () =>
-    toast.success("Video liked!", {
-      position: "bottom-center",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: theme ? "dark" : "light",
-    });
-
-  const SubscribeNotify = () =>
-    toast.success("Channel subscribed!", {
-      position: "bottom-center",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: theme ? "dark" : "light",
-    });
-
-  const CommentDeleteNotify = () =>
-    toast.success("Comment deleted!", {
-      position: "bottom-center",
-      autoClose: 1500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: theme ? "dark" : "light",
-    });
-
   const impDetails = useSelector(
     (state) => state.impDetailsStoreKey.impDetails
   );
-  const {
-    userId,
-    userPp,
-    userName,
-    userEmail,
-    authToken,
-    channelId,
-    channelName,
-  } = impDetails;
+  const { userId, userPp, authToken, channelId, channelName } = impDetails;
 
   const videoId = useParams().videoId;
   console.log("videoid=", videoId);
@@ -215,11 +145,12 @@ function VideoSection() {
         }
       } catch (error) {
         console.log("error in fetching channel id ", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     getVideoDetails();
-
     getComments();
   }, [videoId]);
   const { SuccessNotify, ErrorNotify } = useNotifications(theme);
@@ -353,7 +284,9 @@ function VideoSection() {
       <div className="my-panelbar">
         <LeftPanel />
       </div>
+
       <div
+        style={!loading ? { display: "flex" } : { display: "none" }}
         className={
           theme ? "main-video-section" : "main-video-section light-mode"
         }
@@ -384,8 +317,8 @@ function VideoSection() {
                 className="channelDP"
                 loading="lazy"
                 onClick={() => {
-                  if (channelID !== undefined) {
-                    window.location.href = `/channel/${channelID}`;
+                  if (videoData?.channelId !== undefined) {
+                    window.location.href = `/channel/${videoData?.channelId}`;
                   }
                 }}
               />
@@ -394,8 +327,8 @@ function VideoSection() {
                   <p
                     style={{ fontSize: "17px", cursor: "pointer" }}
                     onClick={() => {
-                      if (channelID !== undefined) {
-                        window.location.href = `/channel/${channelID}`;
+                      if (videoData?.channelId !== undefined) {
+                        window.location.href = `/channel/${videoData?.channelId}`;
                       }
                     }}
                   >
@@ -420,10 +353,38 @@ function VideoSection() {
                 </p>
               </div>
               <button
-                className={theme ? "subscribe" : `subscribe-light`}
-                style={{ cursor: "pointer" }}
+                className={
+                  theme
+                    ? "subscribe"
+                    : `subscribe-light ${userId ? "dull-subs" : ""}`
+                }
+                style={
+                  isSubscribed === true && userId
+                    ? { display: "none" }
+                    : { display: "block" }
+                }
+                onClick={() => {
+                  setIsSubscribed(!isSubscribed);
+                }}
               >
                 Subscribe
+              </button>
+              <button
+                className={
+                  theme
+                    ? "subscribe subscribe2"
+                    : "subscribe subscribe2-light text-light-mode"
+                }
+                style={
+                  isSubscribed === true && userId
+                    ? { display: "block" }
+                    : { display: "none" }
+                }
+                onClick={() => {
+                  setIsSubscribed(!isSubscribed);
+                }}
+              >
+                Subscribed
               </button>
             </div>
             <div className="channel-right-data c-right1">
@@ -444,7 +405,7 @@ function VideoSection() {
                     className="like-icon"
                   />
 
-                  <p className="like-count">{VideoLikes}</p>
+                  <p className="like-count">{videoData?.likes}</p>
                 </div>
                 <div className={theme ? "vl" : "vl-light"}></div>
 
@@ -467,15 +428,6 @@ function VideoSection() {
                 className={
                   theme ? "share" : "share share-light text-light-mode"
                 }
-                // onClick={() => {
-                //   if (shareClicked === false) {
-                //     setShareClicked(true);
-                //     document.body.classList.add("bg-css");
-                //   } else {
-                //     setShareClicked(false);
-                //     document.body.classList.remove("bg-css");
-                //   }
-                // }}
               >
                 <ReplyIcon
                   fontSize="medium"
@@ -1003,6 +955,7 @@ function VideoSection() {
                     }
                     key={index}
                     onClick={() => {
+                      localStorage.setItem("menuClicked", false);
                       window.location.href = `/video/${element._id}`;
                     }}
                   >
