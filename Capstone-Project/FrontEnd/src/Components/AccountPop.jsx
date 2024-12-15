@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import "../Css/accountPop.css";
 import avatar from "../img/avatar.png";
+import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
+import { storage } from "../Firebase";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
@@ -10,17 +13,26 @@ import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import { SiYoutubestudio } from "react-icons/si";
 import { useDispatch, useSelector } from "react-redux";
-import { clearDetails } from "../reducer/impDetails";
+import { clearDetails, updateChannelDetails } from "../reducer/impDetails";
+import useNotifications from "../useNotification";
 
 function AccountPop() {
   const backendURL = "http://localhost:3000";
   const [profile, setProfile] = useState("");
+  const [previewImage, setPreviewImage] = useState(avatar);
+  const [isLoading, setisLoading] = useState(false);
+  const [ChannelName, setChannelName] = useState();
+  const [ChannelAbout, setChannelAbout] = useState();
+  const [imgLoading, setImgLoading] = useState(false);
+
   const [theme, setTheme] = useState(() => {
     const Dark = localStorage.getItem("Dark");
     return Dark ? JSON.parse(Dark) : true;
   });
   // const [channelId, setChannelID] = useState();
   const [isBtnClicked, setIsBtnClicked] = useState(false);
+  const [showChannelForm, setShowChannelForm] = useState(false);
+
   const [isChannel, setIsChannel] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -32,6 +44,110 @@ function AccountPop() {
   );
   const { userId, userPp, userName, userEmail, authToken, channelId } =
     impDetails;
+  const handleChannelname = (e) => {
+    setChannelName(e.target.value);
+  };
+
+  const handleChannelabout = (e) => {
+    setChannelAbout(e.target.value);
+  };
+
+  useEffect(() => {
+    const thumbnailSection = document.querySelector(".selected-pic");
+    if (thumbnailSection) {
+      if (imgLoading) {
+        thumbnailSection.style.cursor = "wait";
+      } else {
+        thumbnailSection.style.cursor = "pointer";
+      }
+    }
+  }, [imgLoading]);
+  const { SuccessNotify, ErrorNotify } = useNotifications(theme);
+
+  const handleThumbnailUpload = async (e) => {
+    setImgLoading(true);
+    const file = e.target.files[0];
+
+    const fileReference = ref(storage, `profile/${file.name}`);
+    const uploadData = uploadBytesResumable(fileReference, file);
+    uploadData.on(
+      "state_changed",
+      null,
+      (error) => {
+        ErrorNotify(error);
+        setImgLoading(false);
+        return;
+      },
+      async () => {
+        try {
+          const downloadURL = await getDownloadURL(uploadData.snapshot.ref);
+          setPreviewImage(downloadURL);
+          console.log("src gene=", downloadURL);
+          setImgLoading(false);
+        } catch (error) {
+          ErrorNotify(error);
+          setImgLoading(false);
+          return;
+        }
+      }
+    );
+  };
+
+  async function saveChannelData(e) {
+    e.preventDefault();
+    try {
+      if (
+        ChannelName === "" ||
+        !ChannelName ||
+        !previewImage ||
+        previewImage === ""
+      ) {
+        ErrorNotify("input fields must not be empty.");
+        return;
+      }
+      if (!userId || !authToken || !userEmail) {
+        window.location.reload();
+        return;
+      }
+      let body = {
+        name: ChannelName,
+        email: userEmail,
+        profilePic: previewImage,
+        ownerId: userId,
+        subscribers: 9987,
+      };
+      const response = await fetch(`${backendURL}/channel/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify(body),
+      });
+      const { newChannel } = await response.json();
+      if (response.ok) {
+        dispatch(
+          updateChannelDetails({
+            previewChannelName: ChannelName,
+            previewChannelThumbnail: previewImage,
+            channelId: newChannel._id,
+          })
+        );
+        localStorage.setItem("userPp", previewImage);
+        localStorage.setItem("channelName", ChannelName);
+        localStorage.setItem("channelId", newChannel._id);
+        SuccessNotify("Channel created.");
+      } else {
+        ErrorNotify("Could not create channel");
+      }
+    } catch (error) {
+      ErrorNotify(error.message);
+    } finally {
+      setTimeout(() => {
+        window.location.reload();
+      }, 1200);
+    }
+  }
 
   const handleLogout = () => {
     dispatch(clearDetails());
@@ -74,7 +190,9 @@ function AccountPop() {
               if (channelId) {
                 window.location.href = `/channel/${channelId}`;
               } else {
-                window.location.href = `/studio`;
+                setIsBtnClicked(true);
+                document.body.classList.add("bg-css");
+                setShowChannelForm(true);
               }
             }}
           >
@@ -87,7 +205,13 @@ function AccountPop() {
           <div
             className={theme ? "yourstudio c-sec" : "yourstudio c-sec2"}
             onClick={() => {
-              window.location.href = "/studio";
+              if (channelId) {
+                window.location.href = `/channel/${channelId}`;
+              } else {
+                setIsBtnClicked(true);
+                document.body.classList.add("bg-css");
+                setShowChannelForm(true);
+              }
             }}
           >
             <SiYoutubestudio
@@ -144,7 +268,7 @@ function AccountPop() {
           theme ? "account-pop" : "account-pop account-pop-light light-mode"
         }
         style={
-          isBtnClicked === true
+          isBtnClicked === true && !showChannelForm
             ? { display: "block", paddingTop: "12px" }
             : { display: "none", paddingTop: "20px" }
         }
@@ -205,6 +329,103 @@ function AccountPop() {
             </div>
           </div>
         </div>
+      </div>
+      <div
+        className={
+          theme ? "create-channel" : "create-channel light-mode text-light-mode"
+        }
+        style={showChannelForm ? { display: "flex" } : { display: "none" }}
+      >
+        <ClearRoundedIcon
+          fontSize="large"
+          className={theme ? "close-channel" : "close-channel-light"}
+          style={{ color: theme ? "rgb(170 170 170 / 50%)" : "#606060" }}
+          onClick={() => {
+            window.location.href = "/";
+            document.body.classList.remove("bg-css");
+          }}
+        />
+        <p className="channel-head">Create Your Channel</p>
+        <p
+          className={
+            theme ? "channel-slogan" : "channel-slogan text-light-mode2"
+          }
+        >
+          Share Your Story: Inspire and Connect with a YouTube Channel!
+        </p>
+        <form onSubmit={saveChannelData} className="channel-deatils">
+          <div className="profile-pic-section">
+            <img
+              src={previewImage}
+              alt="Profile pic"
+              className="selected-pic"
+            />
+            <div className="upload-btn-wrapper">
+              <button className={theme ? "btn" : "btn text-dark-mode"}>
+                SELECT
+              </button>
+              <input
+                type="file"
+                name="myfile"
+                accept=".jpg, .png"
+                onChange={handleThumbnailUpload}
+              />
+            </div>
+          </div>
+          <div className="channel-name">
+            <input
+              className={
+                theme
+                  ? "channelName"
+                  : "channelName light-mode text-light-mode new-light-border"
+              }
+              type="text"
+              name="channelname"
+              placeholder="Channel Name"
+              maxLength={25}
+              onChange={handleChannelname}
+              value={ChannelName}
+              required
+            />
+            <textarea
+              className={
+                theme
+                  ? "channelAbout"
+                  : "channelAbout light-mode text-light-mode new-light-border"
+              }
+              type="text"
+              name="channelAbout"
+              placeholder="About channel"
+              onChange={handleChannelabout}
+              value={ChannelAbout}
+              style={{ width: "93%", resize: "vertical" }}
+              required
+            />
+          </div>
+          {isLoading === false ? (
+            <button
+              className={
+                isLoading
+                  ? `save-data-disable ${theme ? "" : "text-dark-mode"}`
+                  : `save-data ${theme ? "" : "text-dark-mode"}`
+              }
+              type="submit"
+              style={{ marginTop: "22px" }}
+              disabled={isLoading ? true : false}
+            >
+              SAVE
+            </button>
+          ) : (
+            <button
+              className={isLoading ? "save-data-disable" : "save-data"}
+              type="submit"
+              style={{ marginTop: "22px" }}
+              disabled={isLoading ? true : false}
+            >
+              <span className="loader4"></span>
+            </button>
+          )}
+        </form>
       </div>
     </>
   );
