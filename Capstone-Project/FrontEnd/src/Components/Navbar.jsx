@@ -40,16 +40,13 @@ function Navbar() {
   const impDetails = useSelector(
     (state) => state.impDetailsStoreKey.impDetails
   );
-  const { userId, userPp } = impDetails;
-  // useEffect(() => {
-  //   if (impDetails.success) {
-  //     setShowAuthPopup(false);
-  //   }
-  // }, [user]);
+  const { userId, userPp, channelId } = impDetails;
 
   useEffect(() => {
     const handler = (e) => {
       if (!profileRef.current.contains(e.target)) {
+        document.body.classList.remove("bg-css");
+
         setShowPop(false);
       }
     };
@@ -157,13 +154,14 @@ function Navbar() {
           />
 
           <AiOutlineVideoCameraAdd
-            title="YouTube studio"
+            title="Add video"
             className={theme ? "icon-btns videocreate" : "video-light"}
             fontSize="24px"
             style={{ color: theme ? "white" : "black" }}
             onClick={() => {
               if (userId) {
-                window.location.href = "/studio";
+                if (channelId) window.location.href = `/channel/${channelId}`;
+                else alert("Please create a channel first.");
               } else {
                 setShowAuthPopup(true);
                 document.body.classList.add("bg-css");
