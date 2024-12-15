@@ -1,10 +1,9 @@
 import { useState } from "react";
 import "../Css/navbar.css";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
-import { saveUserDetails } from "../reducer/impDetails";
-import useNotifications from "../useNotification";
+import { saveUserDetails } from "../reducer/impDetails.js";
+import useNotifications from "../useNotification.js";
 function Signin(prop) {
   const backendURL = "http://localhost:3000";
   const [data, setData] = useState({});

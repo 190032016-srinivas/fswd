@@ -1,5 +1,5 @@
 import "../Css/Studio/channelvideos.css";
-import { storage } from "../Firebase";
+import { storage } from "../Firebase.js";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";

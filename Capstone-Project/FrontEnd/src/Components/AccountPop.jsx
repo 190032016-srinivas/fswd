@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../Css/accountPop.css";
 import avatar from "../img/avatar.png";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
-import { storage } from "../Firebase";
+import { storage } from "../Firebase.js";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
@@ -13,8 +13,8 @@ import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import { SiYoutubestudio } from "react-icons/si";
 import { useDispatch, useSelector } from "react-redux";
-import { clearDetails, updateChannelDetails } from "../reducer/impDetails";
-import useNotifications from "../useNotification";
+import { clearDetails, updateChannelDetails } from "../reducer/impDetails.js";
+import useNotifications from "../useNotification.js";
 
 function AccountPop() {
   const backendURL = "http://localhost:3000";

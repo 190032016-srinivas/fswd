@@ -1,8 +1,6 @@
-import { validComments } from "../Models/comments.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { validUsers } from "../Models/user.js";
-import validator from "validator";
 import { validChannels } from "../Models/channel.js";
 
 function authenticateUser(req, res, next) {
@@ -128,12 +126,10 @@ export function userRouter(server) {
         message: "SignUp successful",
       });
     } catch (error) {
-      return res
-        .status(500)
-        .json({
-          message: "An error occurred during signup",
-          error: error.message,
-        });
+      return res.status(500).json({
+        message: "An error occurred during signup",
+        error: error.message,
+      });
     }
   });
 }

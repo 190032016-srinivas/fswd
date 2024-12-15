@@ -19,7 +19,7 @@ import { HiOutlineFire } from "react-icons/hi";
 import { MdOutlineSubscriptions } from "react-icons/md";
 import { MdOutlineVideoLibrary } from "react-icons/md";
 import { useSelector } from "react-redux";
-import useNotifications from "../useNotification";
+import useNotifications from "../useNotification.js";
 
 function LeftPanel() {
   const backendURL = "http://localhost:3000";
@@ -123,7 +123,7 @@ function LeftPanel() {
           setPlaylistData(playlistData);
         }
       } catch (error) {
-        ErrorNotify(error)
+        ErrorNotify(error);
       }
     };
     return () => getPlaylistData();
@@ -140,7 +140,7 @@ function LeftPanel() {
           setSavedPlaylist(matchingPlaylists);
         }
       } catch (error) {
-        ErrorNotify(error)
+        ErrorNotify(error);
       }
     };
 

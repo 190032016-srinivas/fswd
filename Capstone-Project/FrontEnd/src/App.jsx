@@ -1,4 +1,4 @@
-import Error from "./Components/Error";
+import Error from "./Components/Error.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { Helmet } from "react-helmet";
@@ -6,7 +6,7 @@ import ytLogo from "./img/icon.png";
 import { useSelector, useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import React, { Suspense, useEffect } from "react";
-import { regainUserDetails } from "./reducer/impDetails";
+import { clearDetails, regainUserDetails } from "./reducer/impDetails.js";
 import LoadingComponent from "./Components/LoadingComponent.jsx";
 
 const Browse = React.lazy(() => import("./Components/Browse.jsx"));
@@ -27,6 +27,25 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const authToken = localStorage.getItem("authToken");
+    const userId = localStorage.getItem("userId");
+    const userPp = localStorage.getItem("userPp");
+    const userName = localStorage.getItem("userName");
+    const userEmail = localStorage.getItem("userName");
+    const channelId = localStorage.getItem("channelId");
+    const channelName = localStorage.getItem("channelName");
+    if (
+      !authToken ||
+      !userId ||
+      !userPp ||
+      !userName ||
+      !userEmail ||
+      !channelId ||
+      !channelName
+    ) {
+      dispatch(clearDetails());
+      localStorage.clear();
+    }
     dispatch(regainUserDetails());
   }, [dispatch]);
 

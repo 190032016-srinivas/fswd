@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import YouTube from "react-youtube";
 
-import Navbar from "./Navbar";
+import Navbar from "./Navbar.jsx";
 import "../Css/videoSection.css";
-import "plyr/dist/plyr.css";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
@@ -17,9 +16,9 @@ import avatar from "../img/avatar.png";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import "react-loading-skeleton/dist/skeleton.css";
 import "react-toastify/dist/ReactToastify.css";
-import LeftPanel from "./LeftPanel";
+import LeftPanel from "./LeftPanel.jsx";
 import { useSelector } from "react-redux";
-import useNotifications from "../useNotification";
+import useNotifications from "../useNotification.js";
 
 function VideoSection() {
   const backendURL = "http://localhost:3000";

@@ -1,6 +1,6 @@
 import "../Css/Studio/channelvideos.css";
 import WestIcon from "@mui/icons-material/West";
-import { storage } from "../Firebase";
+import { storage } from "../Firebase.js";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useEffect, useState } from "react";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
@@ -12,7 +12,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
-import useNotifications from "../useNotification";
+import useNotifications from "../useNotification.js";
 
 function Content(prop) {
   const backendURL = "http://localhost:3000";

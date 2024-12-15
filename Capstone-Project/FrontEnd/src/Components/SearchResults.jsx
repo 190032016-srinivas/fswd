@@ -1,21 +1,14 @@
-import Navbar from "./Navbar";
-import LeftPanel from "./LeftPanel";
+import Navbar from "./Navbar.jsx";
+import LeftPanel from "./LeftPanel.jsx";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "../Css/search.css";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import Tooltip from "@mui/material/Tooltip";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import Signup from "./Signup";
-import Signin from "./Signin";
-import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import nothing from "../img/nothing.png";
-import Zoom from "@mui/material/Zoom";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector } from "react-redux";
-import useNotifications from "../useNotification";
+import useNotifications from "../useNotification.js";
 
 function SearchResults() {
   const backendURL = "http://localhost:3000";

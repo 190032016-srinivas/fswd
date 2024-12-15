@@ -1,11 +1,10 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Navbar from "./Navbar";
-import LeftPanel from "./LeftPanel";
+import Navbar from "./Navbar.jsx";
+import LeftPanel from "./LeftPanel.jsx";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
-
 import WestIcon from "@mui/icons-material/West";
-import { storage } from "../Firebase";
+import { storage } from "../Firebase.js";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import "../Css/channel.css";
 import "../Css/Studio/videodetails.css";
@@ -17,11 +16,11 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Zoom from "@mui/material/Zoom";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
-import useNotifications from "../useNotification";
-import Error from "./Error";
-import Content from "./Content";
-import { updateChannelDetails } from "../reducer/impDetails";
-import ChannelVideos from "./ChannelVideos";
+import useNotifications from "../useNotification.js";
+import Error from "./Error.jsx";
+import Content from "./Content.jsx";
+import { updateChannelDetails } from "../reducer/impDetails.js";
+import ChannelVideos from "./ChannelVideos.jsx";
 function ChannelDetails() {
   const backendURL = "http://localhost:3000";
   const { channelId } = useParams();

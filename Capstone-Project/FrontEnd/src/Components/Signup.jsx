@@ -1,10 +1,9 @@
 import { useState } from "react";
 import "../Css/navbar.css";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import useNotifications from "../useNotification";
+import useNotifications from "../useNotification.js";
 import { useDispatch } from "react-redux";
-import { saveUserDetails } from "../reducer/impDetails";
+import { saveUserDetails } from "../reducer/impDetails.js";
 
 function Signup(prop) {
   const backendURL = "http://localhost:3000";
