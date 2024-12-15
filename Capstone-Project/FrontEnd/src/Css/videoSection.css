@@ -135,6 +135,7 @@ iframe {
   padding-left: 100px;
   padding-right: 32px;
   width: 65%;
+  box-sizing: border-box;
   
 }
 .recommended-section {

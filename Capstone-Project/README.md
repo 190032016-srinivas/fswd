@@ -5,6 +5,7 @@ https://github.com/190032016-srinivas/fswd/tree/master/Capstone-Project
 this is a youtube clone using MERN stack
 this is a combination of both front end and backend complete
 
+please try out the light and dark modes for the app.
 User Authentication using JWT.
 Image storage using Firebase Storage.
 Responsive design for mobile(>375px) and desktop.

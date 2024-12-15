@@ -163,6 +163,10 @@ function Content(prop) {
       ErrorNotify(error);
     } finally {
       setIsEditClicked(false);
+      const midSection = document.querySelector(".channel-mid-content");
+      if (midSection) {
+        midSection.style.display = "block";
+      }
       setTimeout(() => {
         window.location.reload();
       }, 1200);
@@ -357,6 +361,12 @@ function Content(prop) {
                                   setPreviewYtUrl(element.ytUrl);
                                   setPreviewDuration(element.duration);
                                   setIsEditClicked(true);
+                                  const midSection = document.querySelector(
+                                    ".channel-mid-content"
+                                  );
+                                  if (midSection) {
+                                    midSection.style.display = "none";
+                                  }
                                 }}
                               />
 
@@ -419,7 +429,13 @@ function Content(prop) {
         <div>
           <div
             className="back-menu-edit"
-            onClick={() => setIsEditClicked(false)}
+            onClick={() => {
+              setIsEditClicked(false);
+              const midSection = document.querySelector(".channel-mid-content");
+              if (midSection) {
+                midSection.style.display = "block";
+              }
+            }}
           >
             <WestIcon fontSize="medium" style={{ color: "#aaa" }} />
           </div>
