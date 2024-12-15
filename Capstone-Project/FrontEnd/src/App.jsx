@@ -2,7 +2,7 @@ import Browse from "./Components/Browse";
 import Error from "./Components/Error";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import VideoSection from "./Components/VideoSection";
-import OtherChannel from "./Components/Channel/ChannelDetails";
+import OtherChannel from "./Components/ChannelDetails";
 import SearchResults from "./Components/SearchResults";
 import { ToastContainer } from "react-toastify";
 import { Helmet } from "react-helmet";
